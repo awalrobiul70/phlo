@@ -28,7 +28,7 @@ It keeps the web server, PHP, Composer, databases, and your sites in one folder.
 
 | | |
 | --- | --- |
-| Windows | Double-click `Phlo.cmd`, or the Phlo icon |
+| Windows | Double-click `Phlo.cmd`, or the Phlo icon. The program is `bin\phlo-panel.exe` |
 | Linux | Run `chmod +x Phlo.sh` once, then `./Phlo.sh` |
 
 Start turns on the web server, the PHP versions your sites need, and each database or tool that is switched on in Settings. Stop turns those off and leaves the dashboard open.

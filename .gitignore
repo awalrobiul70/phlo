@@ -7,7 +7,12 @@
 # may have its own copies, and home/* already keeps the whole site out.
 # Only Phlo's own files at the project root are named here.
 
-/bin/
+# The three Phlo programs stay in the public repository so Phlo.cmd and
+# Phlo.sh work after clone. Anything else dropped in bin/ stays out.
+/bin/*
+!/bin/phlo.exe
+!/bin/phlo-panel.exe
+!/bin/phlo
 
 # A local snapshot of the public files. It is not part of either repository.
 /phlo_public-*/

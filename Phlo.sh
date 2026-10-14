@@ -2,10 +2,19 @@
 set -eu
 cd "$(dirname "$0")"
 
+if [ -f bin/phlo ]; then
+  chmod +x bin/phlo 2>/dev/null || true
+fi
 if [ ! -x bin/phlo ]; then
-  echo "Build Phlo first:"
-  echo "  go build -o bin/phlo ./cmd/phlo"
-  exit 1
+  if ! command -v go >/dev/null 2>&1; then
+    echo "Build Phlo first:"
+    echo "  go build -o bin/phlo ./cmd/phlo"
+    exit 1
+  fi
+  echo "Building Phlo. The first build can take a minute."
+  mkdir -p bin
+  go build -o bin/phlo ./cmd/phlo || exit 1
+  chmod +x bin/phlo
 fi
 
 PORT=7700
