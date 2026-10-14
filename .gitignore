@@ -38,14 +38,11 @@
 /var/*
 !/var/.gitkeep
 
-# Database folders. The marker is committed so the empty folder exists after
-# clone. The database files stay on this PC.
+# Database folders. Start creates each one. A .gitkeep makes MariaDB and
+# PostgreSQL refuse the folder as not empty, so these folders are not committed.
 /data/*
-!/data/.gitkeep
 /data-mongodb/*
-!/data-mongodb/.gitkeep
 /data-postgres/*
-!/data-postgres/.gitkeep
 
 # User sites, including their own .env and .yml files.
 # Do not add a repository-wide ignore for .env or .yml.
