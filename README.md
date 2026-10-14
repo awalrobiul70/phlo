@@ -1,6 +1,6 @@
 # Phlo
 
-Phlo is a personal, portable local PHP environment for Windows and Linux, in the spirit of Laragon.
+Phlo is a personal, portable local PHP environment for Windows and Linux.
 
 It keeps the web server, PHP, Composer, databases, and your sites in one folder. The dashboard is at [http://127.0.0.1:7700](http://127.0.0.1:7700). The same page has a Guide menu with these steps.
 
