@@ -1,0 +1,462 @@
+{
+  "php": [
+    {
+      "version": "8.2",
+      "patch": "8.2.34",
+      "os": "windows",
+      "arch": "amd64",
+      "url": "https://windows.php.net/downloads/releases/php-8.2.34-nts-Win32-vs16-x64.zip",
+      "sha256": "03249b5c9414c6dbe30276f4a7598bd9d2a7417ee81f709b06b99e9c4a2aff4f",
+      "format": "zip",
+      "bin": "php-cgi.exe"
+    },
+    {
+      "version": "8.3",
+      "patch": "8.3.35",
+      "os": "windows",
+      "arch": "amd64",
+      "url": "https://windows.php.net/downloads/releases/php-8.3.35-nts-Win32-vs16-x64.zip",
+      "sha256": "25a8e2ac9ff30f1d768d1447c09a600617fa6e6082729f6e95f008b59c91fe45",
+      "format": "zip",
+      "bin": "php-cgi.exe"
+    },
+    {
+      "version": "8.4",
+      "patch": "8.4.26",
+      "os": "windows",
+      "arch": "amd64",
+      "url": "https://windows.php.net/downloads/releases/php-8.4.26-nts-Win32-vs17-x64.zip",
+      "sha256": "da68394f9193b7f6b89d0c76861a4034ae10efee7fd55a7255d8118c2acf70d7",
+      "format": "zip",
+      "bin": "php-cgi.exe"
+    }
+  ],
+  "nginx": [
+    {
+      "version": "1.30.5",
+      "os": "windows",
+      "arch": "amd64",
+      "url": "https://nginx.org/download/nginx-1.30.5.zip",
+      "sha256": "e5afe28b6a50bec92c478bfe1a4d3758206b80fb77159277bc5c4e88955c2a35",
+      "format": "zip",
+      "bin": "nginx.exe"
+    }
+  ],
+  "mariadb": [
+    {
+      "version": "11.4.13",
+      "os": "windows",
+      "arch": "amd64",
+      "url": "https://archive.mariadb.org/mariadb-11.4.13/winx64-packages/mariadb-11.4.13-winx64.zip",
+      "sha256": "d62986d433eeebfde218560b276103831604a61e929e87f1a17f5aebd80257e2",
+      "format": "zip",
+      "bin": "bin/mysqld.exe"
+    }
+  ],
+  "redis": [
+    {
+      "version": "8.10.2",
+      "os": "windows",
+      "arch": "amd64",
+      "url": "https://github.com/redis-windows/redis-windows/releases/download/8.10.2/Redis-8.10.2-Windows-x64-msys2.zip",
+      "sha256": "7c8cebd50347eaa1d9e784da842ed47a4f33394637835531d6614777b950ee85",
+      "format": "zip",
+      "bin": "redis-server.exe"
+    }
+  ],
+  "memcached": [
+    {
+      "version": "1.6.8",
+      "os": "windows",
+      "arch": "amd64",
+      "url": "https://github.com/jefyt/memcached-windows/releases/download/1.6.8_mingw/memcached-1.6.8-win64-mingw.zip",
+      "sha256": "4d2ace326f31833e858eb6ebe808fcdfd56c33f179d6417410b09aece03fb3e2",
+      "format": "zip",
+      "bin": "bin/memcached.exe"
+    }
+  ],
+  "mailpit": [
+    {
+      "version": "1.31.4",
+      "os": "windows",
+      "arch": "amd64",
+      "url": "https://github.com/axllent/mailpit/releases/download/v1.31.4/mailpit-windows-amd64.zip",
+      "sha256": "0dd6ec909a6f5b2b66682b22d82abce97ab793e30766bf2f642b691e70a4a16b",
+      "format": "zip",
+      "bin": "mailpit.exe"
+    },
+    {
+      "version": "1.31.4",
+      "os": "linux",
+      "arch": "amd64",
+      "url": "https://github.com/axllent/mailpit/releases/download/v1.31.4/mailpit-linux-amd64.tar.gz",
+      "sha256": "30942c4605c2ca8b9f759b1bb4e3ab6a12bdfdf66e5c94644ec2c75ac41e88e7",
+      "format": "tar.gz",
+      "bin": "mailpit"
+    }
+  ],
+  "cronical": [
+    {
+      "version": "1.3",
+      "os": "windows",
+      "arch": "amd64",
+      "url": "https://github.com/mgefvert/Cronical/raw/v1.3/Binaries/Cronical.exe",
+      "sha256": "aa365a1978ea2b70c0b4588d2560b9418ff58335fca6bd4400d01923c2fa6ace",
+      "format": "file",
+      "bin": "Cronical.exe"
+    }
+  ],
+  "heidisql": [
+    {
+      "version": "12.21",
+      "os": "windows",
+      "arch": "amd64",
+      "url": "https://github.com/HeidiSQL/HeidiSQL/releases/download/v12.21/HeidiSQL_12.21_64_Portable.zip",
+      "sha256": "fecb76a69e29a53ea05b1d57fc2f7b7aaed5b8f889556c6eca545e2a800df1ab",
+      "format": "zip",
+      "bin": "heidisql.exe"
+    }
+  ],
+  "sqlyog": [
+    {
+      "version": "13.3.1",
+      "os": "windows",
+      "arch": "amd64",
+      "url": "https://s3.amazonaws.com/SQLyog_Community/SQLyog%2013.3.1/SQLyog-13.3.1-0.x64Community.exe",
+      "sha256": "d9f2bd343558f6f2907c53464f84c5ddb3a749cc6df41a023f9e63ec07462fc5",
+      "format": "file",
+      "bin": "SQLyog-13.3.1-0.x64Community.exe"
+    }
+  ],
+  "ngrok": [
+    {
+      "version": "3.39.11",
+      "os": "windows",
+      "arch": "amd64",
+      "url": "https://bin.ngrok.com/a/P2eJimSQ97/ngrok-v3-3.39.11-windows-amd64.zip",
+      "sha256": "699bbf1932ec43a573b764bd03e6568efa2c4e45955eb3cc2089c19bb4be4464",
+      "format": "zip",
+      "bin": "ngrok.exe"
+    },
+    {
+      "version": "3.39.11",
+      "os": "linux",
+      "arch": "amd64",
+      "url": "https://bin.ngrok.com/a/5Mrhp7gRDVb/ngrok-v3-3.39.11-linux-amd64.tar.gz",
+      "sha256": "cec0b4997fcc5f529dfc74bac89050354d11a915f968720600039738fdf330cf",
+      "format": "tar.gz",
+      "bin": "ngrok"
+    }
+  ],
+  "phpmyadmin": {
+    "version": "5.2.3",
+    "url": "https://files.phpmyadmin.net/phpMyAdmin/5.2.3/phpMyAdmin-5.2.3-all-languages.zip",
+    "sha256": "2d2e13c735366d318425c78e4ee2cc8fc648d77faba3ddea2cd516e43885733f",
+    "format": "zip",
+    "bin": "index.php"
+  },
+  "composer": {
+    "version": "2.10.3",
+    "url": "https://getcomposer.org/download/2.10.3/composer.phar",
+    "sha256": "7a2d379d5b8ffdaa028580ef26494c36d2feef4b178d3dd1473a4dbc5e17c8d6",
+    "format": "file",
+    "bin": "composer.phar"
+  },
+  "tools": {
+    "mongodb": [
+      {
+        "version": "8.0.32",
+        "os": "windows",
+        "arch": "amd64",
+        "url": "https://fastdl.mongodb.org/windows/mongodb-windows-x86_64-8.0.32.zip",
+        "sha256": "5a0675fdec49b544cd5d374ad50a9a594cf5b3278b5ace658aa51cbb4df17177",
+        "format": "zip",
+        "bin": "bin/mongod.exe",
+        "skip": ["*.pdb"]
+      },
+      {
+        "version": "8.0.32",
+        "os": "linux",
+        "arch": "amd64",
+        "url": "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2204-8.0.32.tgz",
+        "sha256": "41da8d92dde2896ebda278cf296ae86462da6b39eda81ce6ce4fb9ce819adb2e",
+        "format": "tar.gz",
+        "bin": "bin/mongod"
+      }
+    ],
+    "mongosh": [
+      {
+        "version": "2.13.0",
+        "os": "windows",
+        "arch": "amd64",
+        "url": "https://github.com/mongodb-js/mongosh/releases/download/v2.13.0/mongosh-2.13.0-win32-x64.zip",
+        "sha256": "7424ffc141513133e3568015a3efc2c41dfdba909a3ef1945891da9a51aa77fa",
+        "format": "zip",
+        "bin": "bin/mongosh.exe"
+      },
+      {
+        "version": "2.13.0",
+        "os": "linux",
+        "arch": "amd64",
+        "url": "https://github.com/mongodb-js/mongosh/releases/download/v2.13.0/mongosh-2.13.0-linux-x64.tgz",
+        "sha256": "b2089e67641a28aa621476c4d62c69f66b9a41484baba24d8a8b1f5f96e92d0b",
+        "format": "tar.gz",
+        "bin": "bin/mongosh"
+      }
+    ],
+    "postgres": [
+      {
+        "version": "18.6",
+        "os": "windows",
+        "arch": "amd64",
+        "url": "https://get.enterprisedb.com/postgresql/postgresql-18.6-1-windows-x64-binaries.zip",
+        "sha256": "fbe23da234ee31547bf8a36d29dfd81e82b849df2d2b78d2eecb43d360252f8c",
+        "format": "zip",
+        "bin": "bin/postgres.exe",
+        "skip": ["pgAdmin 4", "StackBuilder", "doc", "symbols"]
+      },
+      {
+        "version": "18.6",
+        "os": "linux",
+        "arch": "amd64",
+        "url": "https://github.com/theseus-rs/postgresql-binaries/releases/download/18.6.0/postgresql-18.6.0-x86_64-unknown-linux-gnu.tar.gz",
+        "sha256": "bb3d09f876b2383e25a8c9ce09e32d185a03656a23d074f5195542b1b1b3ca61",
+        "format": "tar.gz",
+        "bin": "bin/postgres"
+      }
+    ],
+    "node": [
+      {
+        "version": "24.21.0",
+        "os": "windows",
+        "arch": "amd64",
+        "url": "https://nodejs.org/dist/v24.21.0/node-v24.21.0-win-x64.zip",
+        "sha256": "158f7685b44de51f6c0df1d153526cbcd3e1bc739a8dfc607721cef75de9e541",
+        "format": "zip",
+        "bin": "node.exe"
+      },
+      {
+        "version": "24.21.0",
+        "os": "linux",
+        "arch": "amd64",
+        "url": "https://nodejs.org/dist/v24.21.0/node-v24.21.0-linux-x64.tar.gz",
+        "sha256": "6e1db87ef58b8819e5d5402eff1536491b18edd8eb7bee5ef7897876e88dc5ff",
+        "format": "tar.gz",
+        "bin": "bin/node"
+      }
+    ],
+    "python": [
+      {
+        "version": "3.13.16",
+        "os": "windows",
+        "arch": "amd64",
+        "url": "https://github.com/astral-sh/python-build-standalone/releases/download/20261009/cpython-3.13.16+20261009-x86_64-pc-windows-msvc-install_only.tar.gz",
+        "sha256": "286285f159bc711e4f0d89bd3d01993d3a321b84bd6593bd66dc816c23609388",
+        "format": "tar.gz",
+        "bin": "python.exe",
+        "skip": ["*.pdb"]
+      },
+      {
+        "version": "3.13.16",
+        "os": "linux",
+        "arch": "amd64",
+        "url": "https://github.com/astral-sh/python-build-standalone/releases/download/20261009/cpython-3.13.16+20261009-x86_64-unknown-linux-gnu-install_only.tar.gz",
+        "sha256": "1cca1041f693f110a2e0d16417090b8996258c7a121e90eeab66c2f40ea407f2",
+        "format": "tar.gz",
+        "bin": "bin/python3"
+      }
+    ],
+    "java": [
+      {
+        "version": "25.0.4.1",
+        "os": "windows",
+        "arch": "amd64",
+        "url": "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.4.1%2B1/OpenJDK25U-jdk_x64_windows_hotspot_25.0.4.1_1.zip",
+        "sha256": "00c847d804f4a78e9f04f2683faf14fed898535b177b7fc704486cb0284e9283",
+        "format": "zip",
+        "bin": "bin/java.exe"
+      },
+      {
+        "version": "25.0.4.1",
+        "os": "linux",
+        "arch": "amd64",
+        "url": "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.4.1%2B1/OpenJDK25U-jdk_x64_linux_hotspot_25.0.4.1_1.tar.gz",
+        "sha256": "dbb698396d478e7fa2b1e50f4103324b2a99b90569ee27c33f2261f9215cf41e",
+        "format": "tar.gz",
+        "bin": "bin/java"
+      }
+    ],
+    "gcc": [
+      {
+        "version": "16.2.0",
+        "os": "windows",
+        "arch": "amd64",
+        "url": "https://github.com/brechtsanders/winlibs_mingw/releases/download/16.2.0posix-14.0.0-ucrt-r2/winlibs-x86_64-posix-seh-gcc-16.2.0-mingw-w64ucrt-14.0.0-r2.zip",
+        "sha256": "d5dbafc4a170e762ca6143151ec918fb9e2c72736fb14cd704abebc6bdd5276a",
+        "format": "zip",
+        "bin": "bin/g++.exe"
+      }
+    ],
+    "docker": [
+      {
+        "version": "29.9.0",
+        "os": "windows",
+        "arch": "amd64",
+        "url": "https://download.docker.com/win/static/stable/x86_64/docker-29.9.0.zip",
+        "sha256": "e3ff5d2e4cd1ad7e1c9bcb76f0df28a84853c43416a915323f08659d8487ad83",
+        "format": "zip",
+        "bin": "docker.exe",
+        "skip": ["dockerd.exe"]
+      },
+      {
+        "version": "29.9.0",
+        "os": "linux",
+        "arch": "amd64",
+        "url": "https://download.docker.com/linux/static/stable/x86_64/docker-29.9.0.tgz",
+        "sha256": "33e1ab8b63d14bca449f7a3d30d7f6aa669daa544e60a86b17fec87f61afe2b4",
+        "format": "tar.gz",
+        "bin": "docker",
+        "skip": ["dockerd", "containerd*", "ctr", "runc", "docker-proxy", "docker-init"]
+      }
+    ],
+    "compose": [
+      {
+        "version": "5.6.0",
+        "os": "windows",
+        "arch": "amd64",
+        "url": "https://github.com/docker/compose/releases/download/v5.6.0/docker-compose-windows-x86_64.exe",
+        "sha256": "8aeaa0055e660e12cf07cd70680dc8333957fe6718528b91ec3da084eab62483",
+        "format": "file",
+        "bin": "docker-compose.exe"
+      },
+      {
+        "version": "5.6.0",
+        "os": "linux",
+        "arch": "amd64",
+        "url": "https://github.com/docker/compose/releases/download/v5.6.0/docker-compose-linux-x86_64",
+        "sha256": "40343e21ca777173e69cff5dbafeb37c6f81f3b0d57d9e597f036e95eb63e76a",
+        "format": "file",
+        "bin": "docker-compose"
+      }
+    ]
+  },
+  "phpExtensions": {
+    "mongodb": [
+      {
+        "version": "2.5.4",
+        "php": "8.1",
+        "os": "windows",
+        "arch": "amd64",
+        "url": "https://github.com/mongodb/mongo-php-driver/releases/download/2.5.4/php_mongodb-2.5.4-8.1-nts-vs16-x86_64.zip",
+        "sha256": "41ee7821fffc3dd5eab4c60bcc5dc63654189cf7d53b4aa856ca1de44dc21377",
+        "format": "zip",
+        "bin": "php_mongodb-2.5.4-8.1-nts-vs16-x86_64.dll",
+        "skip": ["*.pdb"]
+      },
+      {
+        "version": "2.5.4",
+        "php": "8.1",
+        "ts": true,
+        "os": "windows",
+        "arch": "amd64",
+        "url": "https://github.com/mongodb/mongo-php-driver/releases/download/2.5.4/php_mongodb-2.5.4-8.1-ts-vs16-x86_64.zip",
+        "sha256": "b9e4d8409e6b3833399e487561ce13650ff1526854f0af36835de602510b333c",
+        "format": "zip",
+        "bin": "php_mongodb-2.5.4-8.1-ts-vs16-x86_64.dll",
+        "skip": ["*.pdb"]
+      },
+      {
+        "version": "2.5.4",
+        "php": "8.2",
+        "os": "windows",
+        "arch": "amd64",
+        "url": "https://github.com/mongodb/mongo-php-driver/releases/download/2.5.4/php_mongodb-2.5.4-8.2-nts-vs16-x86_64.zip",
+        "sha256": "25f0dde194ba19ce258d09596492b580c0656da14ec1e2ecd952ed5e9ec68a9e",
+        "format": "zip",
+        "bin": "php_mongodb-2.5.4-8.2-nts-vs16-x86_64.dll",
+        "skip": ["*.pdb"]
+      },
+      {
+        "version": "2.5.4",
+        "php": "8.2",
+        "ts": true,
+        "os": "windows",
+        "arch": "amd64",
+        "url": "https://github.com/mongodb/mongo-php-driver/releases/download/2.5.4/php_mongodb-2.5.4-8.2-ts-vs16-x86_64.zip",
+        "sha256": "25f07617f5be03a634166964307431b3eb69b4b12ec1e67c5aeb501fd032dabd",
+        "format": "zip",
+        "bin": "php_mongodb-2.5.4-8.2-ts-vs16-x86_64.dll",
+        "skip": ["*.pdb"]
+      },
+      {
+        "version": "2.5.4",
+        "php": "8.3",
+        "os": "windows",
+        "arch": "amd64",
+        "url": "https://github.com/mongodb/mongo-php-driver/releases/download/2.5.4/php_mongodb-2.5.4-8.3-nts-vs16-x86_64.zip",
+        "sha256": "37ee71b1491aa3c76093f2441655352f836489252334768adfcba7fda2e2a4e3",
+        "format": "zip",
+        "bin": "php_mongodb-2.5.4-8.3-nts-vs16-x86_64.dll",
+        "skip": ["*.pdb"]
+      },
+      {
+        "version": "2.5.4",
+        "php": "8.3",
+        "ts": true,
+        "os": "windows",
+        "arch": "amd64",
+        "url": "https://github.com/mongodb/mongo-php-driver/releases/download/2.5.4/php_mongodb-2.5.4-8.3-ts-vs16-x86_64.zip",
+        "sha256": "df2fe4c7fecb817efbae53d075ffa3ce15f290aca80827fe9c9a5900f9bc0d0a",
+        "format": "zip",
+        "bin": "php_mongodb-2.5.4-8.3-ts-vs16-x86_64.dll",
+        "skip": ["*.pdb"]
+      },
+      {
+        "version": "2.5.4",
+        "php": "8.4",
+        "os": "windows",
+        "arch": "amd64",
+        "url": "https://github.com/mongodb/mongo-php-driver/releases/download/2.5.4/php_mongodb-2.5.4-8.4-nts-vs17-x86_64.zip",
+        "sha256": "d91ce1a61fd08b38f54e4d970c4d0d2567f08711aeb24b238244c15ad29a845a",
+        "format": "zip",
+        "bin": "php_mongodb-2.5.4-8.4-nts-vs17-x86_64.dll",
+        "skip": ["*.pdb"]
+      },
+      {
+        "version": "2.5.4",
+        "php": "8.4",
+        "ts": true,
+        "os": "windows",
+        "arch": "amd64",
+        "url": "https://github.com/mongodb/mongo-php-driver/releases/download/2.5.4/php_mongodb-2.5.4-8.4-ts-vs17-x86_64.zip",
+        "sha256": "63b50ac1d347c5670277e4cd6ee58d819c54e46dee7f873d2ccba9f8dc296813",
+        "format": "zip",
+        "bin": "php_mongodb-2.5.4-8.4-ts-vs17-x86_64.dll",
+        "skip": ["*.pdb"]
+      },
+      {
+        "version": "2.5.4",
+        "php": "8.5",
+        "os": "windows",
+        "arch": "amd64",
+        "url": "https://github.com/mongodb/mongo-php-driver/releases/download/2.5.4/php_mongodb-2.5.4-8.5-nts-vs17-x86_64.zip",
+        "sha256": "cf7693ed2d61328242ca5d2977ebb2a40d211e305c06a9f58d44f883953f3836",
+        "format": "zip",
+        "bin": "php_mongodb-2.5.4-8.5-nts-vs17-x86_64.dll",
+        "skip": ["*.pdb"]
+      },
+      {
+        "version": "2.5.4",
+        "php": "8.5",
+        "ts": true,
+        "os": "windows",
+        "arch": "amd64",
+        "url": "https://github.com/mongodb/mongo-php-driver/releases/download/2.5.4/php_mongodb-2.5.4-8.5-ts-vs17-x86_64.zip",
+        "sha256": "f528bf42619ae2da4b0f8a1db9e9217a037f0446a52f9936287bcc60668f44cb",
+        "format": "zip",
+        "bin": "php_mongodb-2.5.4-8.5-ts-vs17-x86_64.dll",
+        "skip": ["*.pdb"]
+      }
+    ]
+  }
+}

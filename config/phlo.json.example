@@ -1,0 +1,7 @@
+{
+  "defaultPhp": "8.3",
+  "tld": "test",
+  "httpPort": 80,
+  "dashboardPort": 7700,
+  "mysqlPort": 3306
+}

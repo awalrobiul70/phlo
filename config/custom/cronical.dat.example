@@ -1,0 +1,27 @@
+# Phlo Cronical jobs. This file is kept when Phlo starts.
+# php is the Phlo default PHP on PATH.
+#
+# Minute  Hour  Day  Month  Weekday  Command
+# 0-59    0-23  1-31 1-12   0-6      program and arguments
+# * means every value. Weekday 0 is Sunday and 1 is Monday.
+#
+# Every minute. Uncomment to try a job. It runs within one minute:
+# * * * * * php -r "echo 'hourly';"
+#
+# Every hour, at minute 0:
+# 0 * * * * php -r "echo 'hourly';"
+#
+# Every day at 09:15:
+# 15 9 * * * php -r "echo 'hourly';"
+#
+# Mondays at 09:00:
+# 0 9 * * 1 php -r "echo 'hourly';"
+#
+# Every 5 minutes:
+# */5 * * * * php -r "echo 'hourly';"
+#
+# When Cronical starts:
+# @reboot php -r "echo 'hourly';"
+#
+# Same as minute 0 of every hour:
+# @hourly php -r "echo 'hourly';"

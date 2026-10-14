@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Phlo">
+  <defs>
+    <linearGradient id="paper" x1="8" y1="4" x2="56" y2="62" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fffdf8"/>
+      <stop offset="1" stop-color="#e5f5ec"/>
+    </linearGradient>
+    <linearGradient id="ink" x1="16" y1="8" x2="54" y2="52" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#1a9a64"/>
+      <stop offset="1" stop-color="#073224"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="url(#paper)"/>
+  <rect x="2" y="2" width="60" height="60" rx="14.2" fill="none" stroke="#0d5c3c" stroke-opacity="0.16" stroke-width="1.4"/>
+  <path d="M22 50.5 V20.2 C22 14 28.6 12.2 35 12.2 C46.8 12.2 52.4 18 52.4 26.6 C52.4 36.2 44.6 41.2 34 40.2 C28.6 39.6 25.2 36.8 24 33.4" fill="none" stroke="url(#ink)" stroke-width="6.5" stroke-linecap="round"/>
+  <circle cx="24" cy="33.4" r="3.35" fill="#e0b03a"/>
+  <circle cx="22.9" cy="32.3" r="1.05" fill="#fff4cc"/>
+</svg>

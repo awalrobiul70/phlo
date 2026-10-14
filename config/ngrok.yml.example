@@ -1,0 +1,7 @@
+# Sample only. Phlo writes the real file to var/ngrok/ngrok.yml when you save
+# a token in Settings. That file is not committed, and this sample is not copied
+# over it. Replace the token at https://dashboard.ngrok.com before sharing a site.
+version: "3"
+agent:
+  authtoken: your-token
+  web_addr: 127.0.0.1:4049

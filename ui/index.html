@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Phlo</title>
+  <link rel="icon" href="logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+  <div class="shell">
+    <header class="top">
+      <div class="brand">
+        <img class="logo" src="logo.svg" alt="">
+        <div>
+          <p class="mark">Phlo</p>
+          <h1>localDev</h1>
+        </div>
+      </div>
+      <div class="service">
+        <p id="run-state" class="pill">Stopped</p>
+        <button type="button" id="start">Start</button>
+        <button type="button" id="stop" class="quiet" hidden>Stop</button>
+      </div>
+    </header>
+
+    <nav class="nav" aria-label="Main">
+      <button type="button" class="nav-btn active" data-view="dashboard">Dashboard</button>
+      <button type="button" class="nav-btn" data-view="settings">Settings</button>
+      <button type="button" class="nav-btn" data-view="projects">Projects</button>
+      <button type="button" class="nav-btn" data-view="guide">Guide</button>
+      <button type="button" class="nav-btn" data-view="about">About</button>
+    </nav>
+
+    <p id="root-problem" class="banner error" role="alert"></p>
+    <p id="banner" class="banner" role="status"></p>
+    <p id="hosts-warning" class="banner warn" role="status"></p>
+    <p id="port80-note" class="banner warn" role="status"></p>
+    <p id="update-note" class="banner warn" hidden>
+      <span id="update-note-text"></span>
+      <button type="button" id="update-open" class="mini">Update</button>
+    </p>
+    <div id="vc-runtime" class="banner warn vc-runtime" role="status" hidden>
+      <span id="vc-runtime-text"></span>
+      <button type="button" id="vc-runtime-install" class="mini">Install Visual C++ runtime</button>
+    </div>
+
+    <main>
+      <section id="view-dashboard" class="view">
+        <div class="dash-grid">
+          <section class="panel dash-wide">
+            <h2>Stack</h2>
+            <p id="dash-stack" class="hint">Stopped</p>
+          </section>
+          <section class="panel" id="dash-panel-nginx">
+            <h2>Nginx</h2>
+            <p id="dash-nginx-state">Stopped</p>
+            <p id="dash-nginx-meta" class="hint"></p>
+            <p id="dash-nginx-ports"></p>
+          </section>
+          <section class="panel" id="dash-panel-mariadb">
+            <div class="panel-head">
+              <h2>MariaDB</h2>
+              <button type="button" class="secondary mini" data-copy="#dash-db-env">Copy</button>
+            </div>
+            <p id="dash-db-state">Stopped</p>
+            <p id="dash-db-meta" class="hint"></p>
+            <p id="dash-pma-row"></p>
+            <pre id="dash-db-env" class="env"></pre>
+          </section>
+          <section class="panel" id="dash-panel-postgres" hidden>
+            <div class="panel-head">
+              <h2>PostgreSQL</h2>
+              <button type="button" class="secondary mini" data-copy="#dash-postgres-env">Copy</button>
+            </div>
+            <p id="dash-postgres-state">Stopped</p>
+            <p id="dash-postgres-meta" class="hint"></p>
+            <pre id="dash-postgres-env" class="env"></pre>
+          </section>
+          <section class="panel" id="dash-panel-mongodb" hidden>
+            <div class="panel-head">
+              <h2>MongoDB</h2>
+              <button type="button" class="secondary mini" data-copy="#dash-mongodb-env">Copy</button>
+            </div>
+            <p id="dash-mongodb-state">Stopped</p>
+            <p id="dash-mongodb-meta" class="hint"></p>
+            <pre id="dash-mongodb-env" class="env"></pre>
+          </section>
+          <section class="panel" id="dash-panel-redis">
+            <div class="panel-head">
+              <h2>Redis</h2>
+              <button type="button" class="secondary mini" data-copy="#dash-redis-env">Copy</button>
+            </div>
+            <p id="dash-redis-state">Stopped</p>
+            <p id="dash-redis-meta" class="hint"></p>
+            <pre id="dash-redis-env" class="env"></pre>
+          </section>
+          <section class="panel" id="dash-panel-memcached">
+            <div class="panel-head">
+              <h2>Memcached</h2>
+              <button type="button" class="secondary mini" data-copy="#dash-memcached-env">Copy</button>
+            </div>
+            <p id="dash-memcached-state">Stopped</p>
+            <p id="dash-memcached-meta" class="hint"></p>
+            <pre id="dash-memcached-env" class="env"></pre>
+          </section>
+          <section class="panel" id="dash-panel-mailpit">
+            <div class="panel-head">
+              <h2>Mailpit</h2>
+              <button type="button" class="secondary mini" data-copy="#dash-mailpit-env">Copy</button>
+            </div>
+            <p id="dash-mailpit-state">Stopped</p>
+            <p id="dash-mailpit-meta" class="hint"></p>
+            <pre id="dash-mailpit-env" class="env"></pre>
+          </section>
+        </div>
+      </section>
+
+      <section id="view-settings" class="view" hidden>
+        <div class="stack">
+          <div class="panel-row">
+            <div class="panel-split">
+              <section class="panel">
+                <h2>Phlo default PHP</h2>
+                <label for="default-php">Default version</label>
+                <div class="row">
+                  <select id="default-php"></select>
+                  <button type="button" id="save-default" class="secondary">Save default</button>
+                </div>
+              </section>
+
+              <section class="panel">
+                <h2>Project folder</h2>
+                <label for="home-dir">Folder that holds your projects</label>
+                <div class="row">
+                  <input id="home-dir" type="text" spellcheck="false" autocomplete="off">
+                  <button type="button" id="save-home-dir" class="secondary">Change</button>
+                </div>
+                <label class="switch folder-copy">
+                  <input type="checkbox" id="home-copy" checked>
+                  <span>Copy current projects into the new folder</span>
+                </label>
+                <p id="home-dir-hint" class="hint"></p>
+              </section>
+            </div>
+
+            <section class="panel">
+              <h2>Web server</h2>
+              <label for="nginx-version">Nginx version</label>
+              <div class="row">
+                <select id="nginx-version"></select>
+                <button type="button" id="save-nginx" class="secondary">Use</button>
+              </div>
+              <div class="field-row">
+                <div>
+                  <label for="http-port">HTTP port (80)</label>
+                  <div class="row">
+                    <input id="http-port" type="number" min="1" max="65535">
+                    <button type="button" id="save-http-port" class="secondary">Save port</button>
+                  </div>
+                </div>
+                <div>
+                  <label for="ssl-port">SSL port (443)</label>
+                  <div class="row">
+                    <input id="ssl-port" type="number" min="1" max="65535">
+                    <button type="button" id="save-ssl-port" class="secondary">Save port</button>
+                  </div>
+                </div>
+              </div>
+              <label for="host-ip">Host IP (127.0.0.1)</label>
+              <div class="row">
+                <input id="host-ip" type="text" inputmode="decimal" list="host-ips" spellcheck="false" autocomplete="off" placeholder="127.0.0.1">
+                <button type="button" id="save-host-ip" class="secondary">Save IP</button>
+              </div>
+              <datalist id="host-ips"></datalist>
+              <p id="host-ip-hint" class="hint"></p>
+              <div class="row status-row">
+                <div class="service-block">
+                  <label class="switch">
+                    <input type="checkbox" id="ssl-enabled">
+                    <span>SSL on</span>
+                  </label>
+                  <p id="http-state" class="web-url"></p>
+                  <p id="ssl-state" class="web-url">SSL is off</p>
+                </div>
+              </div>
+              <p class="hint">Self-signed certificate in var/ssl. Browsers will warn until you trust it. Add another build as runtime/nginx/1.27.4/nginx.exe.</p>
+            </section>
+          </div>
+
+          <div class="panel-row">
+            <section class="panel">
+              <h2>MariaDB</h2>
+              <div class="row status-row">
+                <div class="service-block">
+                  <label class="switch">
+                    <input type="checkbox" id="mariadb-enabled">
+                    <span>Service on</span>
+                  </label>
+                  <p id="db-state">MariaDB is stopped</p>
+                </div>
+                <button type="button" id="db-terminal" class="secondary">Terminal</button>
+              </div>
+              <div class="field-row">
+                <div>
+                  <label for="mariadb-version">MariaDB version</label>
+                  <div class="row">
+                    <select id="mariadb-version"></select>
+                    <button type="button" id="save-mariadb" class="secondary">Use</button>
+                  </div>
+                </div>
+                <div>
+                  <label for="mysql-port">Port (3306)</label>
+                  <div class="row">
+                    <input id="mysql-port" type="number" min="1" max="65535">
+                    <button type="button" id="save-mysql-port" class="secondary">Save port</button>
+                  </div>
+                </div>
+              </div>
+              <label for="mariadb-dir">Data folder (data)</label>
+              <div class="row">
+                <input id="mariadb-dir" type="text" spellcheck="false" autocomplete="off">
+                <button type="button" id="save-mariadb-dir" class="secondary">Change</button>
+              </div>
+              <label class="switch folder-copy">
+                <input type="checkbox" id="mariadb-copy" checked>
+                <span>Copy current databases into the new folder</span>
+              </label>
+              <p id="mariadb-dir-hint" class="hint"></p>
+              <p id="db-meta" class="hint"></p>
+              <p id="pma-row"></p>
+              <div id="db-gui" class="row" hidden>
+                <button type="button" id="open-heidisql" class="secondary">HeidiSQL</button>
+                <button type="button" id="open-sqlyog" class="secondary">SQLyog</button>
+              </div>
+              <p id="db-gui-meta" class="hint"></p>
+              <p class="hint">Add another build as runtime/mariadb/10.11.11/bin/mysqld.exe. Every version uses the same data folder.</p>
+            </section>
+            <section class="panel">
+              <h2>Mailpit</h2>
+              <div class="row status-row">
+                <div class="service-block">
+                  <label class="switch">
+                    <input type="checkbox" id="mailpit-enabled">
+                    <span>Service on</span>
+                  </label>
+                  <p id="mailpit-state">Mailpit is stopped</p>
+                </div>
+              </div>
+              <div class="field-row">
+                <div>
+                  <label for="mailpit-version">Mailpit version</label>
+                  <div class="row">
+                    <select id="mailpit-version"></select>
+                    <button type="button" id="save-mailpit" class="secondary">Use</button>
+                  </div>
+                </div>
+                <div>
+                  <label for="mailpit-smtp-port">SMTP port (1025)</label>
+                  <div class="row">
+                    <input id="mailpit-smtp-port" type="number" min="1" max="65535">
+                    <button type="button" id="save-mailpit-smtp" class="secondary">Save SMTP</button>
+                  </div>
+                </div>
+              </div>
+              <label for="mailpit-ui-port">Mailbox UI port (8025)</label>
+              <div class="row">
+                <input id="mailpit-ui-port" type="number" min="1" max="65535">
+                <button type="button" id="save-mailpit-ui" class="secondary">Save UI</button>
+              </div>
+              <p id="mailpit-meta" class="hint"></p>
+              <p class="hint">Add another build as runtime/mailpit/1.31.4/mailpit.exe. Every version uses the same mailbox.</p>
+            </section>
+          </div>
+
+          <div class="panel-row">
+            <section class="panel">
+              <h2>PostgreSQL</h2>
+              <div class="row status-row">
+                <div class="service-block">
+                  <label class="switch">
+                    <input type="checkbox" id="postgres-enabled">
+                    <span>Service on</span>
+                  </label>
+                  <p id="postgres-state">PostgreSQL is off</p>
+                </div>
+                <button type="button" id="postgres-terminal" class="secondary">Terminal</button>
+              </div>
+              <div class="field-row">
+                <div>
+                  <label for="postgres-version">PostgreSQL version</label>
+                  <div class="row">
+                    <select id="postgres-version"></select>
+                    <button type="button" id="save-postgres" class="secondary">Use</button>
+                  </div>
+                </div>
+                <div>
+                  <label for="postgres-port">Port (5432)</label>
+                  <div class="row">
+                    <input id="postgres-port" type="number" min="1" max="65535">
+                    <button type="button" id="save-postgres-port" class="secondary">Save port</button>
+                  </div>
+                </div>
+              </div>
+              <label for="postgres-dir">Data folder (data-postgres)</label>
+              <div class="row">
+                <input id="postgres-dir" type="text" spellcheck="false" autocomplete="off">
+                <button type="button" id="save-postgres-dir" class="secondary">Change</button>
+              </div>
+              <label class="switch folder-copy">
+                <input type="checkbox" id="postgres-copy" checked>
+                <span>Copy current databases into the new folder</span>
+              </label>
+              <p id="postgres-dir-hint" class="hint"></p>
+              <p id="postgres-meta" class="hint"></p>
+              <h3 class="sub-head">PHP extension</h3>
+              <p class="hint">PHP talks to PostgreSQL with the pgsql and pdo_pgsql extensions (Laravel uses pdo_pgsql). The PHP builds Phlo downloads already include both, and Phlo turns them on in every php.ini, so there is nothing to add.</p>
+              <ul id="postgres-php" class="php-ext-list"></ul>
+              <p class="hint">Your databases live in the data folder above. A newer build of the same major version (18.6 to 18.7) keeps using them. A different major version (18 to 17, or 17 to 18) cannot open them. Phlo then stops PostgreSQL and tells you how to keep that folder and start with a new empty one. To move databases from one major version to another, copy them with pg_dumpall first (see docs/DEVELOPMENT.md).</p>
+              <p class="hint">Add another build as runtime/postgres/17.11/bin/postgres.exe.</p>
+            </section>
+            <section class="panel">
+              <h2>MongoDB</h2>
+              <div class="row status-row">
+                <div class="service-block">
+                  <label class="switch">
+                    <input type="checkbox" id="mongodb-enabled">
+                    <span>Service on</span>
+                  </label>
+                  <p id="mongodb-state">MongoDB is off</p>
+                </div>
+                <button type="button" id="mongodb-terminal" class="secondary">Terminal</button>
+              </div>
+              <div class="field-row">
+                <div>
+                  <label for="mongodb-version">MongoDB version</label>
+                  <div class="row">
+                    <select id="mongodb-version"></select>
+                    <button type="button" id="save-mongodb" class="secondary">Use</button>
+                  </div>
+                </div>
+                <div>
+                  <label for="mongodb-port">Port (27017)</label>
+                  <div class="row">
+                    <input id="mongodb-port" type="number" min="1" max="65535">
+                    <button type="button" id="save-mongodb-port" class="secondary">Save port</button>
+                  </div>
+                </div>
+              </div>
+              <label for="mongodb-dir">Data folder (data-mongodb)</label>
+              <div class="row">
+                <input id="mongodb-dir" type="text" spellcheck="false" autocomplete="off">
+                <button type="button" id="save-mongodb-dir" class="secondary">Change</button>
+              </div>
+              <label class="switch folder-copy">
+                <input type="checkbox" id="mongodb-copy" checked>
+                <span>Copy current databases into the new folder</span>
+              </label>
+              <p id="mongodb-dir-hint" class="hint"></p>
+              <p id="mongodb-meta" class="hint"></p>
+              <p id="mongosh-row" class="hint"></p>
+              <h3 class="sub-head">PHP extension</h3>
+              <p class="hint">PHP needs the mongodb extension to talk to MongoDB (the mongodb/mongodb Composer package and Laravel MongoDB use it). The official Windows PHP builds do not include it, so add it here once for each PHP version your sites use.</p>
+              <ul id="mongodb-php" class="php-ext-list"></ul>
+              <p class="hint">Add another build as runtime/mongodb/7.0.14/bin/mongod.exe. Every version uses the same data folder.</p>
+            </section>
+          </div>
+
+          <div class="panel-row">
+            <section class="panel">
+              <h2>Redis</h2>
+              <div class="row status-row">
+                <div class="service-block">
+                  <label class="switch">
+                    <input type="checkbox" id="redis-enabled">
+                    <span>Service on</span>
+                  </label>
+                  <p id="redis-state">Redis is stopped</p>
+                </div>
+              </div>
+              <div class="field-row">
+                <div>
+                  <label for="redis-version">Redis version</label>
+                  <div class="row">
+                    <select id="redis-version"></select>
+                    <button type="button" id="save-redis" class="secondary">Use</button>
+                  </div>
+                </div>
+                <div>
+                  <label for="redis-port">Port (6379)</label>
+                  <div class="row">
+                    <input id="redis-port" type="number" min="1" max="65535">
+                    <button type="button" id="save-redis-port" class="secondary">Save port</button>
+                  </div>
+                </div>
+              </div>
+              <p id="redis-meta" class="hint"></p>
+              <p class="hint">Add another build as runtime/redis/7.2.4/redis-server.exe.</p>
+            </section>
+            <section class="panel">
+              <h2>Memcached</h2>
+              <div class="row status-row">
+                <div class="service-block">
+                  <label class="switch">
+                    <input type="checkbox" id="memcached-enabled">
+                    <span>Service on</span>
+                  </label>
+                  <p id="memcached-state">Memcached is stopped</p>
+                </div>
+              </div>
+              <div class="field-row">
+                <div>
+                  <label for="memcached-version">Memcached version</label>
+                  <div class="row">
+                    <select id="memcached-version"></select>
+                    <button type="button" id="save-memcached" class="secondary">Use</button>
+                  </div>
+                </div>
+                <div>
+                  <label for="memcached-port">Port (11211)</label>
+                  <div class="row">
+                    <input id="memcached-port" type="number" min="1" max="65535">
+                    <button type="button" id="save-memcached-port" class="secondary">Save port</button>
+                  </div>
+                </div>
+              </div>
+              <p id="memcached-meta" class="hint"></p>
+              <p class="hint">Add another build as runtime/memcached/1.6.8/memcached.exe.</p>
+            </section>
+          </div>
+
+          <div class="panel-row">
+            <section class="panel">
+              <h2>Cron</h2>
+              <p id="cron-linux" class="hint" hidden>Phlo does not download Cronical on Linux. Use the system crontab.</p>
+              <div id="cron-windows">
+                <div class="row status-row">
+                  <div class="service-block">
+                    <label class="switch">
+                      <input type="checkbox" id="cron-enabled">
+                      <span>Service on</span>
+                    </label>
+                    <p id="cron-state">Cronical is off</p>
+                  </div>
+                  <button type="button" id="download-cronical" class="secondary" hidden>Download Cronical</button>
+                  <button type="button" id="edit-cron" class="secondary">Edit jobs</button>
+                  <button type="button" id="run-cron-test" class="secondary">Run test</button>
+                  <button type="button" id="open-cron-log" class="secondary">Log</button>
+                </div>
+                <p class="hint">Cronical runs with Phlo and stops with Phlo. It is not a Windows service. Jobs stay in config/custom/cronical.dat. The lines are Minute, Hour, Day, Month, Weekday, then the command. Run test runs the example PHP command now and writes its output to this month's job log. Log opens var/log/cronical/cronical-YYYY-MM.log.</p>
+              </div>
+            </section>
+            <section class="panel">
+              <h2>ngrok</h2>
+              <p class="hint">Share one project at a time. The authtoken stays in var/ngrok and is not saved in config/phlo.json. Get a token at <a href="https://dashboard.ngrok.com" target="_blank" rel="noopener">dashboard.ngrok.com</a>.</p>
+              <label for="ngrok-token">Authtoken</label>
+              <div class="row">
+                <input id="ngrok-token" type="password" autocomplete="off" spellcheck="false">
+                <button type="button" id="save-ngrok-token" class="secondary">Save token</button>
+              </div>
+              <p id="ngrok-token-state" class="hint"></p>
+            </section>
+          </div>
+
+          <section class="panel">
+            <h2>Toolchains</h2>
+            <p class="hint">Selected builds go on the project Terminal PATH after PHP. Phlo does not run or proxy apps written in them.</p>
+            <div id="toolchains"></div>
+            <div class="row status-row docker-engine">
+              <div id="docker-engine" class="hint">Docker engine not checked yet.</div>
+              <button type="button" id="docker-check" class="secondary">Check engine</button>
+            </div>
+          </section>
+
+          <section class="panel">
+            <h2>Runtimes</h2>
+            <p class="hint">Edit php.ini, my.ini, postgresql.conf, or mongod.conf to add your own settings. Phlo keeps them in config/custom and adds them after its own settings on every start.</p>
+            <div id="runtimes"></div>
+          </section>
+        </div>
+      </section>
+
+      <section id="view-projects" class="view" hidden>
+        <section class="panel sites-panel">
+          <h2>Projects</h2>
+          <form id="add-site-form" class="add-project">
+            <label for="account-name">Project name</label>
+            <div class="row">
+              <input id="account-name" name="account" autocomplete="off" placeholder="inventory" required>
+              <button type="submit" id="add-site">Add project</button>
+            </div>
+            <p id="add-project-hint" class="hint">Creates home/name/public_html and serves name.test. Links include the port when it is not 80 or 443. Log opens that project's log.</p>
+          </form>
+          <div id="sites"></div>
+        </section>
+      </section>
+
+      <section id="view-guide" class="view" hidden>
+        <section class="panel guide-panel">
+          <h2>User guide</h2>
+          <p>Phlo serves PHP sites from folders on this PC. The steps below are the ones you use from this dashboard.</p>
+
+          <h3>Start and stop</h3>
+          <p>Start in the header turns on Nginx and the PHP versions your sites need, plus each database and tool that is switched on in Settings. Stop turns those off and leaves this dashboard open. The Phlo window has the same Start and Stop. Minimize leaves Phlo running. Close leaves the dashboard running while the server is on. When the server is already stopped, Close also stops the dashboard.</p>
+          <p>When a new Phlo release is published, a notice appears here. About → Update installs that release in one click. Your sites, databases, and downloaded servers stay on this PC.</p>
+
+          <h3>Add a site</h3>
+          <ol>
+            <li>Open Projects.</li>
+            <li>Type a name such as <code>inventory</code> and press Add project.</li>
+            <li>Phlo creates <code>home/inventory/public_html</code> and serves it as <code>inventory.test</code>. A folder at <code>subdomain/shop</code> is <code>shop.inventory.test</code>.</li>
+            <li>Open the link on the card. When the HTTP port is not 80, the link includes that port, such as <code>http://inventory.test:83/</code>.</li>
+          </ol>
+          <p>The first time, Windows may ask for approval to write the site names into the hosts file. Phlo only edits the block between <code># BEGIN PHLO</code> and <code># END PHLO</code>.</p>
+
+          <h3>PHP and the host name</h3>
+          <p>Each <code>public_html</code> and subdomain can use its own PHP. Use Change PHP on the project card. A version that is not installed can be downloaded from that dialog. An empty choice uses the default PHP in Settings.</p>
+          <p>Host replaces <code>inventory.test</code> with a name such as <code>myinventory.test</code>. The name has to end with the TLD from Settings, which is <code>test</code> unless you changed it. Subdomains follow the new name. <code>phpmyadmin.test</code> is reserved.</p>
+
+          <h3>Databases</h3>
+          <p>MariaDB is the MySQL server. The user is <code>root</code> with an empty password. After you download phpMyAdmin from Runtimes, it opens at <code>phpmyadmin.test</code>. PostgreSQL's first start creates the user <code>postgres</code> with no password. MongoDB has no user. Copy the <code>.env</code> block from Dashboard into your project. Phlo does not write that file for you.</p>
+
+          <h3>Another PC, and port 80</h3>
+          <p>Sites open on this PC. To open them from a phone on the same network, choose this PC's address in Settings → Web server → Host IP and save. phpMyAdmin, the dashboard, and the databases stay on <code>127.0.0.1</code>.</p>
+          <p>If another program is using port 80, open the Phlo link that includes the port. Phlo leaves that program running.</p>
+
+          <h3>Mail, cron, and sharing</h3>
+          <p>Mailpit keeps mail on this PC. It does not send it. On Windows, Cron uses Cronical. When the Cron card says Cronical is not installed, press Download Cronical. Run test runs the example PHP command now and writes the output to this month's job log. Edit jobs is <code>config/custom/cronical.dat</code>: Minute, Hour, Day, Month, Weekday, then the command. Remove the <code>#</code> from a line to schedule it.</p>
+          <p>Share on a project opens one ngrok tunnel after you save an authtoken under Settings → ngrok. HeidiSQL and SQLyog open MariaDB from the MariaDB card. They do not start with the stack.</p>
+
+          <h3>Terminal</h3>
+          <p>Terminal on a project opens a shell in that folder, and <code>php</code> there is the PHP selected for that folder. Settings → Toolchains can put Node.js, Python, Java, C++, and the Docker CLI on that PATH. Phlo does not run apps written in those languages, and it does not start a Docker engine.</p>
+        </section>
+      </section>
+
+      <section id="view-about" class="view" hidden>
+        <section class="panel about-panel">
+          <h2>About Phlo</h2>
+          <p id="about-version">Phlo 1.0.0</p>
+          <p id="about-title">First release</p>
+          <ul id="about-notes">
+            <li>First public release.</li>
+            <li>Clone this repository, start Phlo, and download the servers you need from the dashboard.</li>
+            <li>Your sites, databases, and downloaded runtimes stay on your PC.</li>
+          </ul>
+          <p id="about-release">You are up to date.</p>
+          <p><button type="button" id="about-update" class="secondary" hidden>Update</button></p>
+          <p>Phlo is a personal, portable local development environment for Windows and Linux. It keeps the web server, PHP builds, Composer, configuration, and project folders inside this repository tree.</p>
+          <p>Sites live under <code>home/{account}/public_html</code> (Settings can move the project folder) and open as <code>{account}.test</code>. Nginx, PHP pools, MariaDB, MongoDB, PostgreSQL, Redis, Memcached, and Mailpit listen on <code>127.0.0.1</code>. The dashboard also binds to loopback. When you set a Host IP in Settings, Nginx also serves your projects on that address so other devices on your network can open them; phpMyAdmin, the dashboard, and the databases stay on <code>127.0.0.1</code>.</p>
+          <p>Node.js, Python, Java, and C++ are toolchains on the project Terminal PATH. Phlo does not start or proxy apps written in them.</p>
+          <p>Docker is the CLI only. It connects to an engine already on this machine (Docker Desktop, WSL2, or a system dockerd). Phlo never installs or starts the engine.</p>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="php-dialog">
+    <form method="dialog">
+      <p class="eyebrow">PHP</p>
+      <h2>Change PHP</h2>
+      <p id="php-site" class="dialog-site"></p>
+      <label for="php-target">Target</label>
+      <select id="php-target"></select>
+      <fieldset>
+        <legend>PHP version</legend>
+        <div id="php-versions"></div>
+      </fieldset>
+      <p id="php-error" role="alert"></p>
+      <div class="actions">
+        <button type="button" id="php-cancel" class="quiet">Cancel</button>
+        <button type="button" id="php-default" class="secondary">Use Phlo default</button>
+        <button type="button" id="php-download" class="secondary">Download</button>
+        <button type="button" id="php-apply">Apply</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="host-dialog">
+    <form method="dialog">
+      <p class="eyebrow">Host</p>
+      <h2>Custom host</h2>
+      <p id="host-folder" class="hint"></p>
+      <p class="hint">Default host: <strong id="host-default"></strong></p>
+      <label for="custom-host">Custom host</label>
+      <input id="custom-host" autocomplete="off" placeholder="myinventory.test">
+      <p class="hint">Names after save</p>
+      <ul id="host-preview"></ul>
+      <p id="host-error" role="alert"></p>
+      <div class="actions">
+        <button type="button" id="host-cancel" class="quiet">Cancel</button>
+        <button type="button" id="host-reset" class="secondary">Reset to default</button>
+        <button type="button" id="host-save">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="config-dialog" class="config-dialog">
+    <form method="dialog">
+      <p class="eyebrow">Settings file</p>
+      <h2 id="config-title"></h2>
+      <p id="config-hint" class="hint"></p>
+      <label for="config-text">Your settings</label>
+      <textarea id="config-text" class="config-text" spellcheck="false" autocomplete="off" rows="12"></textarea>
+      <p class="hint">Saved in <code id="config-file" class="config-path"></code>. Leave it empty to use only Phlo's settings.</p>
+      <details class="config-generated">
+        <summary>Settings Phlo writes first</summary>
+        <pre id="config-generated" class="env"></pre>
+      </details>
+      <p id="config-error" role="alert"></p>
+      <div class="actions">
+        <button type="button" id="config-cancel" class="quiet">Cancel</button>
+        <button type="button" id="config-save">Save</button>
+      </div>
+    </form>
+  </dialog>
+  <script src="app.js"></script>
+</body>
+</html>

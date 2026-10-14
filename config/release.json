@@ -1,0 +1,10 @@
+{
+  "version": "1.0.0",
+  "title": "First release",
+  "notes": [
+    "First public release.",
+    "Clone this repository, start Phlo, and download the servers you need from the dashboard.",
+    "Your sites, databases, and downloaded runtimes stay on your PC."
+  ],
+  "updateUrl": "https://raw.githubusercontent.com/awalrobiul70/phlo/main/release.json"
+}

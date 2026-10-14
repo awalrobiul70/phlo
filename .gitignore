@@ -1,0 +1,57 @@
+# Public repository: the program and example settings.
+# This PC keeps sites, databases, ports, development notes, and every
+# downloaded runtime in the working folder. Those paths stay out of the
+# public repository.
+#
+# Do not add a repository-wide ignore for .env or .yml. A site under home/
+# may have its own copies, and home/* already keeps the whole site out.
+# Only Phlo's own files at the project root are named here.
+
+/bin/
+
+# A local snapshot of the public files. It is not part of either repository.
+/phlo_public-*/
+
+# Development notes and tests. They stay with this PC's Phlo tree.
+/.ai/
+/docs/
+/AGENTS.md
+**/*_test.go
+
+/*.env
+/*.yml
+/*.yaml
+
+# Downloaded servers and tools. GitHub rejects files over 100 MB, and one
+# copy of every service is still a few gigabytes. After clone, download the
+# versions you need from the dashboard. Do not commit one PHP, Nginx, or
+# database build in place of that download.
+/runtime/*
+!/runtime/.gitkeep
+
+# Generated logs, nginx, PHP ini, and the ngrok token.
+/var/*
+!/var/.gitkeep
+
+# Database folders. The marker is committed so the empty folder exists after
+# clone. The database files stay on this PC.
+/data/*
+!/data/.gitkeep
+/data-mongodb/*
+!/data-mongodb/.gitkeep
+/data-postgres/*
+!/data-postgres/.gitkeep
+
+# User sites, including their own .env and .yml files.
+# Do not add a repository-wide ignore for .env or .yml.
+/home/*
+!/home/.gitkeep
+
+# This PC's ports and switches. The committed sample is config/phlo.json.example.
+# The first start copies it when config/phlo.json is missing.
+/config/phlo.json
+
+# Local service snippets, including the Cronical job file and its PHP path.
+# Samples named *.example stay in the repository.
+/config/custom/*
+!/config/custom/*.example
