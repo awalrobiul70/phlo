@@ -163,15 +163,15 @@ func NonASCIIPart(path string) string {
 	return ""
 }
 
-// FindRoot walks parents until config/phlo.json exists.
+// FindRoot walks parents until config/phlo.json or config/phlo.json.example exists.
+// A fresh clone has only the example. The first start copies it to phlo.json.
 func FindRoot(start string) (string, error) {
 	dir, err := filepath.Abs(start)
 	if err != nil {
 		return "", err
 	}
 	for {
-		info, statErr := os.Stat(filepath.Join(dir, "config", "phlo.json"))
-		if statErr == nil && !info.IsDir() {
+		if isPhloRoot(dir) {
 			return dir, nil
 		}
 		parent := filepath.Dir(dir)
@@ -180,6 +180,16 @@ func FindRoot(start string) (string, error) {
 		}
 		dir = parent
 	}
+}
+
+func isPhloRoot(dir string) bool {
+	for _, name := range []string{"phlo.json", "phlo.json.example"} {
+		info, err := os.Stat(filepath.Join(dir, "config", name))
+		if err == nil && !info.IsDir() {
+			return true
+		}
+	}
+	return false
 }
 
 // Resolve finds the project root from a flag, PHLO_ROOT, the working directory, or the executable path.

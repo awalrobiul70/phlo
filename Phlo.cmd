@@ -10,6 +10,11 @@ if not exist "bin\phlo-panel.exe" (
   call :buildWindow
   if errorlevel 1 exit /b 1
 )
+if not exist "config\phlo.json" (
+  if exist "config\phlo.json.example" (
+    copy /y "config\phlo.json.example" "config\phlo.json" >nul
+  )
+)
 
 start "" /D "%~dp0" "%~dp0bin\phlo-panel.exe"
 exit /b 0

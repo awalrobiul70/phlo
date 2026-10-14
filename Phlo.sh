@@ -17,6 +17,10 @@ if [ ! -x bin/phlo ]; then
   chmod +x bin/phlo
 fi
 
+if [ ! -f config/phlo.json ] && [ -f config/phlo.json.example ]; then
+  cp config/phlo.json.example config/phlo.json
+fi
+
 PORT=7700
 if command -v python3 >/dev/null 2>&1; then
   PORT=$(python3 -c 'import json; print(json.load(open("config/phlo.json"))["dashboardPort"])')
