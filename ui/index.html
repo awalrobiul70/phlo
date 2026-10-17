@@ -5,6 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex">
   <title>Phlo</title>
+  <script>
+    try {
+      var phloTheme = localStorage.getItem("phlo-theme");
+      if (phloTheme !== "dark" && phloTheme !== "light") {
+        phloTheme = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      }
+      document.documentElement.dataset.theme = phloTheme;
+    } catch (e) {}
+  </script>
   <link rel="icon" href="logo.svg" type="image/svg+xml">
   <link rel="stylesheet" href="app.css">
 </head>
@@ -19,6 +28,7 @@
         </div>
       </div>
       <div class="service">
+        <button type="button" id="theme" aria-pressed="false">Dark</button>
         <p id="run-state" class="pill">Stopped</p>
         <button type="button" id="start">Start</button>
         <button type="button" id="stop" class="quiet" hidden>Stop</button>
@@ -502,6 +512,7 @@
           <p>Phlo serves PHP sites from folders on this PC. The steps below are the ones you use from this dashboard.</p>
 
           <h3>Start and stop</h3>
+          <p>Dark in the header switches the dashboard to dark mode. Light switches it back. The choice stays on this browser.</p>
           <p>Start in the header turns on Nginx and the PHP versions your sites need, plus each database and tool that is switched on in Settings. Stop turns those off and leaves this dashboard open. The Phlo window has the same Start and Stop. Minimize leaves Phlo running. Close leaves the dashboard running while the server is on. When the server is already stopped, Close also stops the dashboard.</p>
           <p>When a new Phlo release is published, a notice appears here. About → Update installs that release in one click. Your sites, databases, and downloaded servers stay on this PC.</p>
 

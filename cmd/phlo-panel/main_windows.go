@@ -66,6 +66,7 @@ const (
 var instance windows.Handle
 
 func main() {
+	setAppUserModelID()
 	if !claimPanel() {
 		focusExisting()
 		return
@@ -75,6 +76,7 @@ func main() {
 		tell(err.Error())
 		return
 	}
+	ensureDesktopShortcut(root)
 	cfg := readLaunchConfig(root)
 	if err := ensureServer(root, cfg.Port); err != nil {
 		if dashboardBindFailed(err.Error()) {
@@ -497,8 +499,16 @@ func setWindowIcon(hwnd uintptr, path string) {
 	if err != nil {
 		return
 	}
-	big, _, _ := procLoadImage.Call(0, uintptr(unsafe.Pointer(p)), imageIcon, 32, 32, lrLoadFromFile)
-	small, _, _ := procLoadImage.Call(0, uintptr(unsafe.Pointer(p)), imageIcon, 16, 16, lrLoadFromFile)
+	bigSize, _, _ := procGetSystemMetrics.Call(11)   // SM_CXICON
+	smallSize, _, _ := procGetSystemMetrics.Call(49) // SM_CXSMICON
+	if bigSize == 0 {
+		bigSize = 32
+	}
+	if smallSize == 0 {
+		smallSize = 16
+	}
+	big, _, _ := procLoadImage.Call(0, uintptr(unsafe.Pointer(p)), imageIcon, bigSize, bigSize, lrLoadFromFile)
+	small, _, _ := procLoadImage.Call(0, uintptr(unsafe.Pointer(p)), imageIcon, smallSize, smallSize, lrLoadFromFile)
 	if big != 0 {
 		procSendMessage.Call(hwnd, wmSetIcon, 1, big)
 	}

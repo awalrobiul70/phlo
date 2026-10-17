@@ -28,12 +28,16 @@ It keeps the web server, PHP, Composer, databases, and your sites in one folder.
 
 | | |
 | --- | --- |
-| Windows | Double-click `Phlo.cmd`, or the Phlo icon. The program is `bin\phlo-panel.exe` |
+| Windows | Double-click `Phlo.cmd`, or the Phlo icon. If Windows will not run `Phlo.cmd`, double-click `Phlo.vbs` |
 | Linux | Run `chmod +x Phlo.sh` once, then `./Phlo.sh` |
 
 Start turns on the web server, the PHP versions your sites need, and each database or tool that is switched on in Settings. Stop turns those off and leaves the dashboard open.
 
 On Windows, Minimize leaves Phlo running. Close leaves the dashboard running while the server is on. When the server is already stopped, Close also stops the dashboard. If port 7700 is already in use, the window asks for another port and leaves the other program running.
+
+Starting Phlo puts a Phlo icon on the desktop. Pin that icon to the taskbar; it uses the Phlo logo.
+
+If Windows security removes `bin\phlo-panel.exe`, Phlo opens the dashboard in the browser instead. Leave that console window open. Closing it stops Phlo.
 
 On Linux, closing the window that you started with `Phlo.sh` stops Phlo.
 

@@ -30,6 +30,7 @@ var programFiles = map[string]struct{}{
 	"config/release.json":  {},
 	"README.md":            {},
 	"Phlo.cmd":             {},
+	"Phlo.vbs":             {},
 	"Phlo.sh":              {},
 }
 

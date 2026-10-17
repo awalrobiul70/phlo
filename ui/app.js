@@ -1,3 +1,40 @@
+const themeButton = document.querySelector("#theme");
+const themeKey = "phlo-theme";
+
+function applyTheme(theme) {
+  const dark = theme === "dark";
+  document.documentElement.dataset.theme = dark ? "dark" : "light";
+  if (!themeButton) return;
+  themeButton.textContent = dark ? "Light" : "Dark";
+  themeButton.setAttribute("aria-pressed", dark ? "true" : "false");
+  themeButton.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
+}
+
+function savedTheme() {
+  const current = document.documentElement.dataset.theme;
+  if (current === "dark" || current === "light") return current;
+  try {
+    const saved = localStorage.getItem(themeKey);
+    if (saved === "dark" || saved === "light") return saved;
+  } catch (_) {
+    /* keep the light dashboard */
+  }
+  return "light";
+}
+
+applyTheme(savedTheme());
+if (themeButton) {
+  themeButton.addEventListener("click", () => {
+    const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+    try {
+      localStorage.setItem(themeKey, next);
+    } catch (_) {
+      /* the switch still works for this visit */
+    }
+    applyTheme(next);
+  });
+}
+
 const banner = document.querySelector("#banner");
 const rootProblem = document.querySelector("#root-problem");
 const hostsWarning = document.querySelector("#hosts-warning");

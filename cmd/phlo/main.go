@@ -24,10 +24,7 @@ import (
 
 func main() {
 	rootFlag, args := parseArgs(os.Args[1:])
-	if len(args) == 0 {
-		usage()
-		os.Exit(2)
-	}
+	args, openDash := launchCommand(args)
 	cwd, _ := os.Getwd()
 	exe, _ := os.Executable()
 	root, err := paths.Resolve(rootFlag, os.Getenv("PHLO_ROOT"), cwd, exe)
@@ -38,9 +35,19 @@ func main() {
 	if err != nil {
 		fail(err)
 	}
-	if err := run(application, args); err != nil {
+	if err := run(application, args, openDash); err != nil {
 		fail(err)
 	}
+}
+
+// launchCommand starts Phlo and opens the dashboard when no command was given.
+// That is the double-click of bin\phlo.exe, used when Phlo.cmd is blocked or
+// Windows has removed bin\phlo-panel.exe.
+func launchCommand(args []string) ([]string, bool) {
+	if len(args) == 0 {
+		return []string{"start"}, true
+	}
+	return args, false
 }
 
 func parseArgs(args []string) (string, []string) {
@@ -56,12 +63,12 @@ func parseArgs(args []string) (string, []string) {
 	return "", args
 }
 
-func run(application *app.App, args []string) error {
+func run(application *app.App, args []string, openDash bool) error {
 	switch args[0] {
 	case "start":
-		return serve(application, true)
+		return serve(application, true, openDash)
 	case "ui":
-		return serve(application, false)
+		return serve(application, false, false)
 	case "stop":
 		return stop(application)
 	case "status", "scan":
@@ -82,7 +89,7 @@ func run(application *app.App, args []string) error {
 	}
 }
 
-func serve(application *app.App, startServices bool) error {
+func serve(application *app.App, startServices bool, openDash bool) error {
 	if err := proc.Acquire(application.Layout.PhloPID()); err != nil {
 		return err
 	}
@@ -123,6 +130,9 @@ func serve(application *app.App, startServices bool) error {
 		}
 	}
 	fmt.Printf("dashboard http://127.0.0.1:%d\n", application.Config.DashboardPort)
+	if openDash {
+		go openDashboard(application.Config.DashboardPort)
+	}
 	go func() {
 		<-ctx.Done()
 		cleanup()
@@ -292,10 +302,42 @@ func runCommand(cmd *exec.Cmd) error {
 	return err
 }
 
+func openDashboard(port int) {
+	page := fmt.Sprintf("http://127.0.0.1:%d/", port)
+	client := &http.Client{Timeout: time.Second}
+	deadline := time.Now().Add(30 * time.Second)
+	for time.Now().Before(deadline) {
+		res, err := client.Get(page + "api/health")
+		if err == nil {
+			res.Body.Close()
+			if res.StatusCode == http.StatusOK {
+				_ = browse(page)
+				return
+			}
+		}
+		time.Sleep(200 * time.Millisecond)
+	}
+}
+
+func browse(page string) error {
+	var cmd *exec.Cmd
+	switch goruntime.GOOS {
+	case "windows":
+		cmd = exec.Command("rundll32", "url.dll,FileProtocolHandler", page)
+	case "darwin":
+		cmd = exec.Command("open", page)
+	default:
+		cmd = exec.Command("xdg-open", page)
+	}
+	proc.Configure(cmd)
+	return cmd.Start()
+}
+
 func usage() {
 	fmt.Fprintf(os.Stderr, `Phlo local PHP environment
 
 Usage:
+  phlo
   phlo [--root path] start
   phlo [--root path] stop
   phlo [--root path] status
@@ -312,6 +354,8 @@ Usage:
   phlo [--root path] java|javac [args]
   phlo [--root path] gcc|g++ [args]
   phlo [--root path] docker [args]
+
+Running phlo with no command starts Phlo and opens the dashboard.
 `)
 }
 
