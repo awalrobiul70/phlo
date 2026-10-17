@@ -133,6 +133,7 @@ func (s *Supervisor) startLocked() error {
 	if s.nginxAlive() {
 		return errs.New("services are already running")
 	}
+	s.stopOwned()
 	s.clearStalePID(s.Layout.NginxPID())
 	sites, err := s.scan()
 	if err != nil {
@@ -1133,6 +1134,13 @@ func (s *Supervisor) stopLocked() {
 		}
 		closeChild(ch)
 		delete(s.procs, key)
+	}
+	s.stopOwned()
+}
+
+func (s *Supervisor) stopOwned() {
+	for _, pid := range proc.OwnedServicePIDs(s.Layout.Root) {
+		s.killPID(pid)
 	}
 }
 

@@ -142,7 +142,11 @@ func findRoot() (string, error) {
 
 func ensureServer(root string, port int) error {
 	if healthy(port) {
-		return nil
+		other := dashboardRoot(port)
+		if other == "" || sameRoot(other, root) {
+			return nil
+		}
+		return fmt.Errorf("Another Phlo is already running from %s.\nStop that Phlo before opening this folder.", other)
 	}
 	if portTaken(port) {
 		return fmt.Errorf("127.0.0.1:%d is already in use", port)
@@ -213,6 +217,22 @@ func tail(path string) string {
 		text = text[len(text)-700:]
 	}
 	return text
+}
+
+func dashboardRoot(port int) string {
+	client := &http.Client{Timeout: time.Second}
+	res, err := client.Get(fmt.Sprintf("http://127.0.0.1:%d/api/status", port))
+	if err != nil {
+		return ""
+	}
+	defer res.Body.Close()
+	var body struct {
+		Root string `json:"root"`
+	}
+	if json.NewDecoder(res.Body).Decode(&body) != nil {
+		return ""
+	}
+	return body.Root
 }
 
 func healthy(port int) bool {

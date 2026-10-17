@@ -19,6 +19,10 @@ type launchConfig struct {
 	HostIP string
 }
 
+func sameRoot(a, b string) bool {
+	return strings.EqualFold(filepath.Clean(a), filepath.Clean(b))
+}
+
 func readLaunchConfig(root string) launchConfig {
 	cfg := launchConfig{Port: 7700, TLD: "test"}
 	body, err := os.ReadFile(filepath.Join(root, "config", "phlo.json"))
