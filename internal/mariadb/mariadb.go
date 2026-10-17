@@ -28,6 +28,13 @@ func Config(basedir, datadir, pidFile, errorLog string, port int) string {
 	fmt.Fprintf(&b, "character-set-server=utf8mb4\n")
 	fmt.Fprintf(&b, "collation-server=utf8mb4_unicode_ci\n")
 	fmt.Fprintf(&b, "skip-name-resolve\n")
+	// Local use. A crash can lose about one second of commits, which is the
+	// trade for not flushing every commit and not writing a binary log.
+	fmt.Fprintf(&b, "innodb_flush_log_at_trx_commit=2\n")
+	fmt.Fprintf(&b, "skip-log-bin\n")
+	fmt.Fprintf(&b, "performance_schema=OFF\n")
+	fmt.Fprintf(&b, "innodb_buffer_pool_size=256M\n")
+	fmt.Fprintf(&b, "max_allowed_packet=64M\n")
 	return b.String()
 }
 
