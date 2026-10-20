@@ -28,11 +28,18 @@ func Config(basedir, datadir, pidFile, errorLog string, port int) string {
 	fmt.Fprintf(&b, "character-set-server=utf8mb4\n")
 	fmt.Fprintf(&b, "collation-server=utf8mb4_unicode_ci\n")
 	fmt.Fprintf(&b, "skip-name-resolve\n")
-	// Local use. A crash can lose about one second of commits, which is the
-	// trade for not flushing every commit and not writing a binary log.
+	// MariaDB 11 and 12 on Windows default to innodb_flush_method=unbuffered,
+	// innodb_log_file_buffering=OFF, and innodb_flush_log_at_trx_commit=1.
+	// Each commit then waits for a 512-byte disk write. Buffering the redo log
+	// and flushing it about once a second is the local-use tradeoff: a power
+	// loss can drop about one second of commits.
 	fmt.Fprintf(&b, "innodb_flush_log_at_trx_commit=2\n")
+	fmt.Fprintf(&b, "innodb_log_file_buffering=ON\n")
+	fmt.Fprintf(&b, "innodb_flush_neighbors=0\n")
+	if runtime.GOOS == "windows" {
+		fmt.Fprintf(&b, "innodb_flush_method=normal\n")
+	}
 	fmt.Fprintf(&b, "skip-log-bin\n")
-	fmt.Fprintf(&b, "performance_schema=OFF\n")
 	fmt.Fprintf(&b, "innodb_buffer_pool_size=256M\n")
 	fmt.Fprintf(&b, "max_allowed_packet=64M\n")
 	return b.String()
