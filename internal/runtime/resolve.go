@@ -35,7 +35,11 @@ func ResolvePHP(manifest Manifest, layout paths.Layout, version, goos, goarch st
 		return exe, nil
 	}
 	flat := filepath.Join(layout.Runtime(), "php", version)
-	if exe := findBinary(flat, "php-cgi.exe", "php-fpm.exe", "php-cgi", "php-fpm"); exe != "" {
+	names := []string{"php-cgi.exe", "php-fpm.exe", "php-cgi", "php-fpm"}
+	if exe := findBinary(flat, names...); exe != "" {
+		return exe, nil
+	}
+	if exe := findBinaryInChildren(flat, names...); exe != "" {
 		return exe, nil
 	}
 	return "", errs.New("PHP " + version + " is not in the Phlo manifest for " + goos + "/" + goarch)
@@ -303,7 +307,15 @@ func listInstalls(layout paths.Layout, kind string, lookup func() (Artifact, err
 			continue
 		}
 		version := entry.Name()
-		item := byVersion[version]
+		item, known := byVersion[version]
+		if !known {
+			// A pasted folder is a version only when its program is inside, the same way a PHP folder needs php-cgi.exe.
+			if resolve(version) != nil {
+				continue
+			}
+			byVersion[version] = Install{Version: version, Installed: true}
+			continue
+		}
 		item.Version = version
 		if resolve(version) == nil {
 			item.Installed = true
@@ -327,7 +339,28 @@ func findVersionBinary(layout paths.Layout, kind, version, goos, goarch string, 
 	if exe := findBinary(root, names...); exe != "" {
 		return exe
 	}
-	return findBinary(filepath.Join(root, goos+"-"+goarch), names...)
+	if exe := findBinary(filepath.Join(root, goos+"-"+goarch), names...); exe != "" {
+		return exe
+	}
+	// A zip often unpacks as runtime/{kind}/{version}/{ArchiveName}/program.exe.
+	return findBinaryInChildren(root, names...)
+}
+
+// findBinaryInChildren looks one folder down. It does not walk further.
+func findBinaryInChildren(dir string, names ...string) string {
+	entries, err := os.ReadDir(dir)
+	if err != nil {
+		return ""
+	}
+	for _, entry := range entries {
+		if !entry.IsDir() {
+			continue
+		}
+		if exe := findBinary(filepath.Join(dir, entry.Name()), names...); exe != "" {
+			return exe
+		}
+	}
+	return ""
 }
 
 // ResolveMySQLClient finds mysql or mariadb next to the server binary.

@@ -58,6 +58,30 @@ Download Nginx and at least one PHP version from **Settings → Runtimes** befor
 
 **Host** replaces `inventory.test` with a name such as `myinventory.test`. Subdomains follow that name. `phpmyadmin.test` is reserved.
 
+## Add PHP or Redis by hand
+
+**Settings → Runtimes** can download a version. You can also copy a build into the Phlo folder. The folder name is the version. Reload the dashboard after you copy it. A folder is Installed only when the program Phlo runs is inside it.
+
+PHP: extract a Windows PHP zip so `php-cgi.exe` and `php.exe` sit in `runtime/php/8.4.3/`, or one folder under that. Both of these count:
+
+```text
+runtime/php/8.4.3/php-cgi.exe
+runtime/php/8.4.3/php-8.4.3-nts-Win32-vs17-x64/php-cgi.exe
+```
+
+Runtimes then lists that version as Installed. **Change PHP** on a project can select it.
+
+Redis: the folder has to contain `redis-server.exe` and the DLL files that came with that build. Both of these count:
+
+```text
+runtime/redis/8.10.2/redis-server.exe
+runtime/redis/8.10.2/Redis-8.10.2-Windows-x64-msys2/redis-server.exe
+```
+
+Choose that version under **Settings → Redis**, then press **Start**.
+
+A download named phpredis is the PHP extension, not the Redis server. Pasting that source into `runtime/redis/6.1.0` leaves `library.c` and no `redis-server.exe`, so Phlo does not list it as installed Redis. The PHP builds Phlo downloads do not load that extension.
+
 ## Databases
 
 MariaDB is the MySQL server. The user is `root` with an empty password. After you download phpMyAdmin, it opens at `phpmyadmin.test`.
@@ -75,6 +99,35 @@ Do not start Phlo as administrator or root if you use PostgreSQL. A different Po
 Sites open on this PC. To open them from a phone on the same network, enter this PC's address in **Settings → Web server → Host IP** and save. phpMyAdmin, the dashboard, and the databases stay on `127.0.0.1`.
 
 If another program is using port 80, open the Phlo link that includes Phlo's port. Phlo leaves that program running.
+
+## Check Redis and Memcached
+
+The Dashboard cards show whether each one is running, and the port on `127.0.0.1`. The usual ports are `6379` and `11211`. An application can use `localhost` for that address. If a card says stopped, download that program from **Settings → Runtimes** and press **Start**.
+
+On Windows, `redis-cli` is not on the system PATH. From the Phlo folder, run the program in the version folder named on the Redis card. For Redis 8.10.2:
+
+```text
+.\runtime\redis\8.10.2\redis-cli.exe -h 127.0.0.1 -p 6379 PING
+.\runtime\redis\8.10.2\redis-cli.exe -h 127.0.0.1 -p 6379 SET phlo:test hello
+.\runtime\redis\8.10.2\redis-cli.exe -h 127.0.0.1 -p 6379 GET phlo:test
+```
+
+`PING` answers `PONG`. `GET` answers `hello`. Use the version folder and the `-p` port from the card when they differ. On Linux the program is `runtime/redis/8.10.2/redis-cli`.
+
+Memcached does not include a separate client. From PowerShell, this asks port `11211` for its version (use the port on the card):
+
+```powershell
+$tcp = New-Object System.Net.Sockets.TcpClient('127.0.0.1', 11211)
+$tcp.Client.Send([Text.Encoding]::ASCII.GetBytes("version`r`n")) | Out-Null
+$buf = New-Object byte[] 64
+$n = $tcp.Client.Receive($buf)
+[Text.Encoding]::ASCII.GetString($buf, 0, $n)
+$tcp.Close()
+```
+
+The reply starts with `VERSION`. On Linux, `printf 'version\r\n' | nc 127.0.0.1 11211` does the same when `nc` is installed.
+
+The PHP builds Phlo downloads do not load the `redis` or `memcached` extensions, so `php -m` does not list them. Laravel can still use Redis: copy the Redis block from Dashboard (`REDIS_CLIENT=predis`) and point the host and port at the card. CodeIgniter 3's cache Redis driver needs the PHP `redis` extension. It reads `app/config/redis.php`. The `$config['cache']['redis']` block in `config.php` is not that connection. A successful `redis-cli` check does not make that CodeIgniter driver work until the extension is loaded.
 
 ## Mail, cron, and sharing
 
