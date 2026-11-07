@@ -80,7 +80,7 @@ runtime/redis/8.10.2/Redis-8.10.2-Windows-x64-msys2/redis-server.exe
 
 Choose that version under **Settings → Redis**, then press **Start**.
 
-A download named phpredis is the PHP extension, not the Redis server. Pasting that source into `runtime/redis/6.1.0` leaves `library.c` and no `redis-server.exe`, so Phlo does not list it as installed Redis. The PHP builds Phlo downloads do not load that extension.
+A download named phpredis is the PHP extension source, not the Redis server. Pasting that source into `runtime/redis/6.1.0` leaves `library.c` and no `redis-server.exe`, so Phlo does not list it as installed Redis. Use **Settings → Redis → PHP extension** to add the matching Windows DLL for each PHP version.
 
 ## Databases
 
@@ -127,7 +127,7 @@ $tcp.Close()
 
 The reply starts with `VERSION`. On Linux, `printf 'version\r\n' | nc 127.0.0.1 11211` does the same when `nc` is installed.
 
-The PHP builds Phlo downloads do not load the `redis` or `memcached` extensions, so `php -m` does not list them. Laravel can still use Redis: copy the Redis block from Dashboard (`REDIS_CLIENT=predis`) and point the host and port at the card. CodeIgniter 3's cache Redis driver needs the PHP `redis` extension. It reads `app/config/redis.php`. The `$config['cache']['redis']` block in `config.php` is not that connection. A successful `redis-cli` check does not make that CodeIgniter driver work until the extension is loaded.
+Laravel can use Redis without a PHP extension: copy the Redis block from Dashboard (`REDIS_CLIENT=predis`). CodeIgniter 3's cache Redis driver needs the PHP `redis` extension. Add it under **Settings → Redis → PHP extension** for that site's PHP version. It reads `app/config/redis.php`. The `$config['cache']['redis']` block in `config.php` is not that connection. Memcached has the same Add button under **Settings → Memcached**.
 
 ## Mail, cron, and sharing
 
@@ -139,7 +139,7 @@ On Windows, Cron uses Cronical. If the Cron card says it is not installed, press
 
 ## Terminal
 
-**Terminal** on a project opens a shell in that folder. `php` there is the PHP selected for that folder, so `php artisan` uses that version.
+**Terminal** on a project opens a shell in that folder. `php` there is the PHP selected for that folder, so `php artisan` uses that version. When Composer is downloaded under **Settings → Runtimes**, `composer` also works in that Terminal and uses the same PHP with Phlo's `runtime/composer/composer.phar`.
 
 **Settings → Toolchains** can put Node.js, Python, Java, C++, and the Docker command on that same Terminal. On Windows, a C++ program built in that Terminal runs there; add `-static` if the `.exe` should run outside it. On Linux, C++ uses the compiler from your distribution (`sudo apt install build-essential`).
 

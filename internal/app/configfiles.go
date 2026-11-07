@@ -285,10 +285,14 @@ func (a *App) checkPHPSettings(version, file, content string) error {
 	if err := os.WriteFile(fullPath, []byte(prefix+content), 0o644); err != nil {
 		return err
 	}
-	before := phpStartupLines(cli, basePath)
+	var extraEnv []string
+	if dirs := phloruntime.PHPExtPathDirs(a.Layout, version, filepath.Dir(cli)); len(dirs) > 0 {
+		extraEnv = append(extraEnv, "PATH="+strings.Join(append(dirs, os.Getenv("PATH")), string(os.PathListSeparator)))
+	}
+	before := phpStartupLines(cli, basePath, extraEnv)
 	offset := strings.Count(prefix, "\n")
 	var problems []string
-	for _, line := range phpStartupLines(cli, fullPath) {
+	for _, line := range phpStartupLines(cli, fullPath, extraEnv) {
 		if slices.Contains(before, line) || slices.Contains(problems, line) {
 			continue
 		}
@@ -314,11 +318,14 @@ func (a *App) checkPHPSettings(version, file, content string) error {
 }
 
 // phpStartupLines are the warnings PHP prints while it reads ini, with the ini path replaced by {ini}.
-func phpStartupLines(cli, ini string) []string {
+func phpStartupLines(cli, ini string, extraEnv []string) []string {
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 	defer cancel()
 	cmd := exec.CommandContext(ctx, cli, "-c", ini, "-r", "")
 	cmd.Dir = filepath.Dir(cli)
+	if len(extraEnv) > 0 {
+		cmd.Env = append(os.Environ(), extraEnv...)
+	}
 	proc.Configure(cmd)
 	out, _ := cmd.CombinedOutput()
 	var lines []string

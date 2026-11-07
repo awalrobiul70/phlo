@@ -18,7 +18,9 @@ var phpExtNameRe = regexp.MustCompile(`^[a-z][a-z0-9_]{0,31}$`)
 
 // PHPExtensionLabels names the extensions Phlo can download. A manifest entry needs a label here.
 var PHPExtensionLabels = map[string]string{
-	"mongodb": "MongoDB",
+	"mongodb":   "MongoDB",
+	"redis":     "Redis",
+	"memcached": "Memcached",
 }
 
 func (m Manifest) validatePHPExtensions() error {
@@ -85,20 +87,21 @@ func PHPThreadSafe(dir string) bool {
 
 // PHPExtensionFiles lists downloaded or dropped-in extension files for the PHP build in phpDir.
 // They live in runtime/phpext/{name}/{major.minor}-{ts|nts}/.
+// Companion libraries such as libmemcached.dll stay in that folder but are not listed here.
 func PHPExtensionFiles(layout paths.Layout, version, phpDir, goos string) []string {
-	minor, err := php.Normalize(version)
-	if err != nil {
-		return nil
-	}
-	pattern := "*.so"
-	if goos == "windows" {
-		pattern = "*.dll"
-	}
-	dirs, _ := filepath.Glob(filepath.Join(layout.Runtime(), "phpext", "*", PHPExtKey(minor, PHPThreadSafe(phpDir))))
+	dirs := PHPExtPathDirs(layout, version, phpDir)
 	var files []string
 	for _, dir := range dirs {
+		pattern := "*.so"
+		if goos == "windows" {
+			pattern = "php_*.dll"
+		}
 		matches, _ := filepath.Glob(filepath.Join(dir, pattern))
 		for _, match := range matches {
+			base := strings.ToLower(filepath.Base(match))
+			if goos != "windows" && strings.HasPrefix(base, "lib") {
+				continue
+			}
 			if info, err := os.Stat(match); err == nil && !info.IsDir() {
 				files = append(files, match)
 			}
@@ -106,6 +109,18 @@ func PHPExtensionFiles(layout paths.Layout, version, phpDir, goos string) []stri
 	}
 	sort.Strings(files)
 	return files
+}
+
+// PHPExtPathDirs are runtime/phpext folders for this PHP build. PHP needs them on PATH
+// so companion DLLs next to an extension (for example libmemcached.dll) can load.
+func PHPExtPathDirs(layout paths.Layout, version, phpDir string) []string {
+	minor, err := php.Normalize(version)
+	if err != nil {
+		return nil
+	}
+	dirs, _ := filepath.Glob(filepath.Join(layout.Runtime(), "phpext", "*", PHPExtKey(minor, PHPThreadSafe(phpDir))))
+	sort.Strings(dirs)
+	return dirs
 }
 
 // PHPINI is the generated php.ini for the PHP build in phpDir, with its extra extensions.

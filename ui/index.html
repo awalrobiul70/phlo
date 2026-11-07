@@ -406,7 +406,10 @@
                 </div>
               </div>
               <p id="redis-meta" class="hint"></p>
-              <p class="hint">Add another build as runtime/redis/7.2.4/redis-server.exe.</p>
+              <h3>PHP extension</h3>
+              <p class="hint">PHP needs the redis extension for CodeIgniter cache and other apps that call Redis directly. Laravel can use Predis without it. The official Windows PHP builds do not include it, so add it here once for each PHP version your sites use.</p>
+              <ul id="redis-php" class="php-ext-list"></ul>
+              <p class="hint">Add another Redis server build as runtime/redis/7.2.4/redis-server.exe.</p>
             </section>
             <section class="panel">
               <h2>Memcached</h2>
@@ -436,7 +439,10 @@
                 </div>
               </div>
               <p id="memcached-meta" class="hint"></p>
-              <p class="hint">Add another build as runtime/memcached/1.6.8/memcached.exe.</p>
+              <h3>PHP extension</h3>
+              <p class="hint">PHP needs the memcached extension to talk to Memcached. The official Windows PHP builds do not include it, so add it here once for each PHP version your sites use.</p>
+              <ul id="memcached-php" class="php-ext-list"></ul>
+              <p class="hint">Add another Memcached server build as runtime/memcached/1.6.8/memcached.exe.</p>
             </section>
           </div>
 
@@ -533,7 +539,7 @@
           <p>Settings → Runtimes can download a version. You can also copy a build into this Phlo folder. The folder name is the version. Reload the dashboard after you copy it. A folder is Installed only when the program Phlo runs is inside it, the same way a PHP folder is Installed only when <code>php-cgi.exe</code> is there.</p>
           <p>For PHP, extract a Windows PHP zip so <code>php-cgi.exe</code> and <code>php.exe</code> sit in <code>runtime/php/8.4.3/</code>, or one folder under that. <code>runtime/php/8.4.3/php-cgi.exe</code> and <code>runtime/php/8.4.3/php-8.4.3-nts-Win32-vs17-x64/php-cgi.exe</code> both count. Runtimes then lists that version as Installed, and Change PHP on a project can select it.</p>
           <p>For Redis, the folder has to contain <code>redis-server.exe</code> and the DLL files that came with that build. <code>runtime/redis/8.10.2/redis-server.exe</code> counts, and so does one extra folder from the zip, such as <code>runtime/redis/8.10.2/Redis-8.10.2-Windows-x64-msys2/redis-server.exe</code>. Choose that version under Settings → Redis, then press Start.</p>
-          <p>A download named phpredis is the PHP extension, not the Redis server. Pasting that source into <code>runtime/redis/6.1.0</code> leaves <code>library.c</code> and no <code>redis-server.exe</code>, so Phlo does not treat it as an installed Redis. The PHP builds Phlo downloads do not load that extension.</p>
+          <p>A download named phpredis is the PHP extension source, not the Redis server. Pasting that source into <code>runtime/redis/6.1.0</code> leaves <code>library.c</code> and no <code>redis-server.exe</code>, so Phlo does not treat it as an installed Redis. Use Settings → Redis → PHP extension to add the matching Windows DLL for each PHP version.</p>
 
           <h3>Databases</h3>
           <p>MariaDB is the MySQL server. The user is <code>root</code> with an empty password. After you download phpMyAdmin from Runtimes, it opens at <code>phpmyadmin.test</code>. PostgreSQL's first start creates the user <code>postgres</code> with no password. MongoDB has no user. Copy the <code>.env</code> block from Dashboard into your project. Phlo does not write that file for you.</p>
@@ -553,7 +559,7 @@ $n = $tcp.Client.Receive($buf)
 [Text.Encoding]::ASCII.GetString($buf, 0, $n)
 $tcp.Close()</pre>
           <p>The reply starts with <code>VERSION</code>. On Linux, <code>printf 'version\r\n' | nc 127.0.0.1 11211</code> does the same when <code>nc</code> is installed.</p>
-          <p>The PHP builds Phlo downloads do not load the <code>redis</code> or <code>memcached</code> extensions, so <code>php -m</code> does not list them. A working <code>redis-cli</code> check does not by itself let every framework use Redis. Laravel can: copy the Redis block from Dashboard, which sets <code>REDIS_CLIENT=predis</code>, and point the host and port at the card. CodeIgniter 3's cache Redis driver needs the PHP <code>redis</code> extension. It reads <code>app/config/redis.php</code> (<code>host</code>, <code>port</code>, <code>password</code>). The <code>$config['cache']['redis']</code> block in <code>config.php</code> is not that connection.</p>
+          <p>A working <code>redis-cli</code> check does not by itself let every framework use Redis. Laravel can use Predis without a PHP extension: copy the Redis block from Dashboard (<code>REDIS_CLIENT=predis</code>). CodeIgniter 3's cache Redis driver needs the PHP <code>redis</code> extension. Add it under Settings → Redis → PHP extension for that site's PHP version. It reads <code>app/config/redis.php</code> (<code>host</code>, <code>port</code>, <code>password</code>). The <code>$config['cache']['redis']</code> block in <code>config.php</code> is not that connection. Memcached has the same Add button under Settings → Memcached.</p>
 
           <h3>Another PC, and port 80</h3>
           <p>Sites open on this PC. To open them from a phone on the same network, choose this PC's address in Settings → Web server → Host IP and save. phpMyAdmin, the dashboard, and the databases stay on <code>127.0.0.1</code>.</p>
@@ -564,7 +570,7 @@ $tcp.Close()</pre>
           <p>Share on a project opens one ngrok tunnel after you save an authtoken under Settings → ngrok. HeidiSQL and SQLyog open MariaDB from the MariaDB card. They do not start with the stack.</p>
 
           <h3>Terminal</h3>
-          <p>Terminal on a project opens a shell in that folder, and <code>php</code> there is the PHP selected for that folder. Settings → Toolchains can put Node.js, Python, Java, C++, and the Docker CLI on that PATH. Phlo does not run apps written in those languages, and it does not start a Docker engine.</p>
+          <p>Terminal on a project opens a shell in that folder. <code>php</code> is the PHP selected for that folder. When Composer is downloaded under Runtimes, <code>composer</code> also works there and uses that same PHP with Phlo's <code>runtime/composer/composer.phar</code>. You do not need to type the full path to <code>php.exe</code> or <code>composer.phar</code>. Settings → Toolchains can put Node.js, Python, Java, C++, and the Docker CLI on that PATH. Phlo does not run apps written in those languages, and it does not start a Docker engine.</p>
         </section>
       </section>
 

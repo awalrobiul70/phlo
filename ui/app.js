@@ -423,8 +423,12 @@ function renderDashboard() {
   ]);
 
   document.querySelector("#dash-redis-state").textContent = status.redisRunning ? "Redis is running" : "Redis is stopped";
+  const redisPHP = phpExtOf("redis").filter((item) => item.installed).map((item) => item.php);
   document.querySelector("#dash-redis-meta").textContent =
-    `127.0.0.1:${status.redisPort} — ${status.redis || "—"}`;
+    `127.0.0.1:${status.redisPort} — ${status.redis || "—}. ` +
+    (redisPHP.length
+      ? `PHP redis extension loaded for PHP ${redisPHP.join(", ")}.`
+      : "Laravel can use Predis. For the PHP redis extension, open Settings → Redis.");
   fillEnv("#dash-redis-env", [
     "REDIS_CLIENT=predis",
     "REDIS_HOST=127.0.0.1",
@@ -433,8 +437,12 @@ function renderDashboard() {
   ]);
 
   document.querySelector("#dash-memcached-state").textContent = status.memcachedRunning ? "Memcached is running" : "Memcached is stopped";
+  const memPHP = phpExtOf("memcached").filter((item) => item.installed).map((item) => item.php);
   document.querySelector("#dash-memcached-meta").textContent =
-    `127.0.0.1:${status.memcachedPort} — ${status.memcached || "—"}`;
+    `127.0.0.1:${status.memcachedPort} — ${status.memcached || "—}. ` +
+    (memPHP.length
+      ? `PHP memcached extension loaded for PHP ${memPHP.join(", ")}.`
+      : "PHP cannot use Memcached yet: add the memcached extension in Settings → Memcached.");
   fillEnv("#dash-memcached-env", [
     "MEMCACHED_HOST=127.0.0.1",
     "MEMCACHED_PORT=" + status.memcachedPort,
@@ -526,6 +534,8 @@ function renderSettings() {
   document.querySelector("#mongodb-meta").textContent = `127.0.0.1:${status.mongodbPort} — no user or password.` + missing("mongodb");
   renderMongosh();
   renderPHPExtensions("mongodb", document.querySelector("#mongodb-php"));
+  renderPHPExtensions("redis", document.querySelector("#redis-php"));
+  renderPHPExtensions("memcached", document.querySelector("#memcached-php"));
   renderPHPExtensions("pgsql", document.querySelector("#postgres-php"));
   renderCron();
   renderDBTools();
@@ -645,7 +655,7 @@ function renderPHPExtensions(name, list) {
         download("phpext-" + name, item.php, button, `the ${name} ${item.version} extension for PHP ${item.php}`));
       row.append(button);
     } else {
-      row.append(el("span", `No ${item.label} build for PHP ${item.build}. Use PHP 8.1 or newer for this site.`, "state"));
+      row.append(el("span", `No ${item.label} build for PHP ${item.build}.`, "state"));
     }
     list.append(row);
   }

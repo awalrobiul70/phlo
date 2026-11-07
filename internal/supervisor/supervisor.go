@@ -404,7 +404,11 @@ func (s *Supervisor) launchPHP(job phpJob) error {
 		args = php.CGIArgs(fmt.Sprintf("127.0.0.1:%d", job.Port), ini)
 	}
 	logPath := s.Layout.Log("php-" + job.Version + ".log")
-	ch, err := startLogged(job.Exe, args, job.Dir, []string{"PHP_FCGI_MAX_REQUESTS=0"}, logPath)
+	extra := []string{"PHP_FCGI_MAX_REQUESTS=0"}
+	if dirs := phloruntime.PHPExtPathDirs(s.Layout, job.Version, job.Dir); len(dirs) > 0 {
+		extra = append(extra, "PATH="+strings.Join(append(dirs, os.Getenv("PATH")), string(os.PathListSeparator)))
+	}
+	ch, err := startLogged(job.Exe, args, job.Dir, extra, logPath)
 	if err != nil {
 		return err
 	}

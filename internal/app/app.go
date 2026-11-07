@@ -980,6 +980,13 @@ func (a *App) projectShell(dir, version, account, target string) ([]string, erro
 	}
 	phpDir := filepath.Dir(cli)
 	tools := a.toolchains(true)
+	var front []string
+	if shim, err := a.ensureComposerShim(); err == nil {
+		front = append(front, shim)
+		tools.Banner = append([]string{"Composer (Phlo)"}, tools.Banner...)
+	}
+	front = append(front, phloruntime.PHPExtPathDirs(a.Layout, version, phpDir)...)
+	tools.Dirs = append(front, tools.Dirs...)
 	if runtime.GOOS != "windows" {
 		return terminal.UnixProjectCommand(phpDir, ini, version, tools), nil
 	}
@@ -993,6 +1000,31 @@ func (a *App) projectShell(dir, version, account, target string) ([]string, erro
 		return nil, err
 	}
 	return []string{path}, nil
+}
+
+// ensureComposerShim writes a composer launcher that uses the Terminal's PHP and Phlo's composer.phar.
+func (a *App) ensureComposerShim() (string, error) {
+	phar := a.Layout.ComposerFile()
+	if _, err := os.Stat(phar); err != nil {
+		return "", err
+	}
+	dir := a.Layout.Shims()
+	if err := os.MkdirAll(dir, 0o755); err != nil {
+		return "", err
+	}
+	if runtime.GOOS == "windows" {
+		body := "@echo off\r\nphp \"" + phar + "\" %*\r\n"
+		if err := os.WriteFile(filepath.Join(dir, "composer.cmd"), []byte(body), 0o644); err != nil {
+			return "", err
+		}
+		return dir, nil
+	}
+	body := "#!/bin/sh\nexec php " + strconv.Quote(phar) + " \"$@\"\n"
+	path := filepath.Join(dir, "composer")
+	if err := os.WriteFile(path, []byte(body), 0o755); err != nil {
+		return "", err
+	}
+	return dir, nil
 }
 
 func shellToken(value string) string {

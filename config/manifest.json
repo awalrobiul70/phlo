@@ -2,31 +2,41 @@
   "php": [
     {
       "version": "8.2",
-      "patch": "8.2.34",
+      "patch": "8.2.35",
       "os": "windows",
       "arch": "amd64",
-      "url": "https://windows.php.net/downloads/releases/php-8.2.34-nts-Win32-vs16-x64.zip",
-      "sha256": "03249b5c9414c6dbe30276f4a7598bd9d2a7417ee81f709b06b99e9c4a2aff4f",
+      "url": "https://windows.php.net/downloads/releases/php-8.2.35-1-nts-Win32-vs16-x64.zip",
+      "sha256": "ebe75134c03869826cb1714d31fd5eb96afefa6d9fd35d786971c03020e7bce2",
       "format": "zip",
       "bin": "php-cgi.exe"
     },
     {
       "version": "8.3",
-      "patch": "8.3.35",
+      "patch": "8.3.36",
       "os": "windows",
       "arch": "amd64",
-      "url": "https://windows.php.net/downloads/releases/php-8.3.35-nts-Win32-vs16-x64.zip",
-      "sha256": "25a8e2ac9ff30f1d768d1447c09a600617fa6e6082729f6e95f008b59c91fe45",
+      "url": "https://windows.php.net/downloads/releases/php-8.3.36-1-nts-Win32-vs16-x64.zip",
+      "sha256": "1a097d52b7a68622cdc723073b61cc70caf79c941218ff65b2d8441dbc6b10d4",
       "format": "zip",
       "bin": "php-cgi.exe"
     },
     {
       "version": "8.4",
-      "patch": "8.4.26",
+      "patch": "8.4.27",
       "os": "windows",
       "arch": "amd64",
-      "url": "https://windows.php.net/downloads/releases/php-8.4.26-nts-Win32-vs17-x64.zip",
-      "sha256": "da68394f9193b7f6b89d0c76861a4034ae10efee7fd55a7255d8118c2acf70d7",
+      "url": "https://windows.php.net/downloads/releases/php-8.4.27-1-nts-Win32-vs17-x64.zip",
+      "sha256": "dbae154a0a89791f36c3d48e68bae797878333e7d6cb5721e74617de59b63ab7",
+      "format": "zip",
+      "bin": "php-cgi.exe"
+    },
+    {
+      "version": "8.5",
+      "patch": "8.5.12",
+      "os": "windows",
+      "arch": "amd64",
+      "url": "https://windows.php.net/downloads/releases/php-8.5.12-1-nts-Win32-vs17-x64.zip",
+      "sha256": "2a36a2edcb7a5b9252f638fd5e4cf84d7f6e066092654220dc0b63e5cf4e9723",
       "format": "zip",
       "bin": "php-cgi.exe"
     }
@@ -455,6 +465,286 @@
         "sha256": "f528bf42619ae2da4b0f8a1db9e9217a037f0446a52f9936287bcc60668f44cb",
         "format": "zip",
         "bin": "php_mongodb-2.5.4-8.5-ts-vs17-x86_64.dll",
+        "skip": ["*.pdb"]
+      }
+    ],
+    "redis": [
+      {
+        "version": "6.3.0",
+        "php": "7.4",
+        "os": "windows",
+        "arch": "amd64",
+        "url": "https://downloads.php.net/~windows/pecl/releases/redis/6.3.0/php_redis-6.3.0-7.4-nts-vc15-x64.zip",
+        "sha256": "c74f1fb5500b493050839330b4cbfb84dafc07da99b898939ac4b690fe74de1a",
+        "format": "zip",
+        "bin": "php_redis.dll",
+        "skip": ["*.pdb"]
+      },
+      {
+        "version": "6.3.0",
+        "php": "7.4",
+        "ts": true,
+        "os": "windows",
+        "arch": "amd64",
+        "url": "https://downloads.php.net/~windows/pecl/releases/redis/6.3.0/php_redis-6.3.0-7.4-ts-vc15-x64.zip",
+        "sha256": "ceec3af8d72443f0d36683e2a1a7ef11eb0f34db2f82dfd66be141dbceea9b02",
+        "format": "zip",
+        "bin": "php_redis.dll",
+        "skip": ["*.pdb"]
+      },
+      {
+        "version": "6.3.0",
+        "php": "8.1",
+        "os": "windows",
+        "arch": "amd64",
+        "url": "https://downloads.php.net/~windows/pecl/releases/redis/6.3.0/php_redis-6.3.0-8.1-nts-vs16-x64.zip",
+        "sha256": "952ec845408e343f273eab109e62a9c7732178d93985120736da4a171d41b9b0",
+        "format": "zip",
+        "bin": "php_redis.dll",
+        "skip": ["*.pdb"]
+      },
+      {
+        "version": "6.3.0",
+        "php": "8.1",
+        "ts": true,
+        "os": "windows",
+        "arch": "amd64",
+        "url": "https://downloads.php.net/~windows/pecl/releases/redis/6.3.0/php_redis-6.3.0-8.1-ts-vs16-x64.zip",
+        "sha256": "16c9b51a5507c27e525961598cccb943f6276bd195b5cd461f1b09fa5aa836b7",
+        "format": "zip",
+        "bin": "php_redis.dll",
+        "skip": ["*.pdb"]
+      },
+      {
+        "version": "6.3.0",
+        "php": "8.2",
+        "os": "windows",
+        "arch": "amd64",
+        "url": "https://downloads.php.net/~windows/pecl/releases/redis/6.3.0/php_redis-6.3.0-8.2-nts-vs16-x64.zip",
+        "sha256": "b2b730b99b97352212b338c01f7dde577857e31c5f8e1d011ec2871e63f8f87c",
+        "format": "zip",
+        "bin": "php_redis.dll",
+        "skip": ["*.pdb"]
+      },
+      {
+        "version": "6.3.0",
+        "php": "8.2",
+        "ts": true,
+        "os": "windows",
+        "arch": "amd64",
+        "url": "https://downloads.php.net/~windows/pecl/releases/redis/6.3.0/php_redis-6.3.0-8.2-ts-vs16-x64.zip",
+        "sha256": "92ddf1e09011ada452c481e0c0e3551c6979d5ea865e2042651cd88216e5c4bf",
+        "format": "zip",
+        "bin": "php_redis.dll",
+        "skip": ["*.pdb"]
+      },
+      {
+        "version": "6.3.0",
+        "php": "8.3",
+        "os": "windows",
+        "arch": "amd64",
+        "url": "https://downloads.php.net/~windows/pecl/releases/redis/6.3.0/php_redis-6.3.0-8.3-nts-vs16-x64.zip",
+        "sha256": "519fc1bdf54323d3ab08443c66f77e783d314c13b532e27cc8b390def7f81b60",
+        "format": "zip",
+        "bin": "php_redis.dll",
+        "skip": ["*.pdb"]
+      },
+      {
+        "version": "6.3.0",
+        "php": "8.3",
+        "ts": true,
+        "os": "windows",
+        "arch": "amd64",
+        "url": "https://downloads.php.net/~windows/pecl/releases/redis/6.3.0/php_redis-6.3.0-8.3-ts-vs16-x64.zip",
+        "sha256": "6d04d2b5db80c7c88e504c6fc8b969d42e4f9866eefccb08e949944107a501d3",
+        "format": "zip",
+        "bin": "php_redis.dll",
+        "skip": ["*.pdb"]
+      },
+      {
+        "version": "6.3.0",
+        "php": "8.4",
+        "os": "windows",
+        "arch": "amd64",
+        "url": "https://downloads.php.net/~windows/pecl/releases/redis/6.3.0/php_redis-6.3.0-8.4-nts-vs17-x64.zip",
+        "sha256": "6db881ed172703962002d7e02dacc8ddb3f789904c648fee3e6ceec1319679cd",
+        "format": "zip",
+        "bin": "php_redis.dll",
+        "skip": ["*.pdb"]
+      },
+      {
+        "version": "6.3.0",
+        "php": "8.4",
+        "ts": true,
+        "os": "windows",
+        "arch": "amd64",
+        "url": "https://downloads.php.net/~windows/pecl/releases/redis/6.3.0/php_redis-6.3.0-8.4-ts-vs17-x64.zip",
+        "sha256": "ab63ee174ce18766179af7b9fcb540207817fb4187b8178795468cfbf0e277b5",
+        "format": "zip",
+        "bin": "php_redis.dll",
+        "skip": ["*.pdb"]
+      },
+      {
+        "version": "6.3.0",
+        "php": "8.5",
+        "os": "windows",
+        "arch": "amd64",
+        "url": "https://downloads.php.net/~windows/pecl/releases/redis/6.3.0/php_redis-6.3.0-8.5-nts-vs17-x64.zip",
+        "sha256": "481d6d1af45060ab41af6abe250faa270276fc47a493badc2e178024cdf6e255",
+        "format": "zip",
+        "bin": "php_redis.dll",
+        "skip": ["*.pdb"]
+      },
+      {
+        "version": "6.3.0",
+        "php": "8.5",
+        "ts": true,
+        "os": "windows",
+        "arch": "amd64",
+        "url": "https://downloads.php.net/~windows/pecl/releases/redis/6.3.0/php_redis-6.3.0-8.5-ts-vs17-x64.zip",
+        "sha256": "1a1e9c721dd64939dbeac1c855eb5bb93a45e5a825ad0e13b42f46731c8223d2",
+        "format": "zip",
+        "bin": "php_redis.dll",
+        "skip": ["*.pdb"]
+      }
+    ],
+    "memcached": [
+      {
+        "version": "3.4.0",
+        "php": "7.4",
+        "os": "windows",
+        "arch": "amd64",
+        "url": "https://downloads.php.net/~windows/pecl/releases/memcached/3.4.0/php_memcached-3.4.0-7.4-nts-vc15-x64.zip",
+        "sha256": "12fac432942303431b64c9d46b2c949ce6583acc53e31f113d670babb0382c89",
+        "format": "zip",
+        "bin": "php_memcached.dll",
+        "skip": ["*.pdb"]
+      },
+      {
+        "version": "3.4.0",
+        "php": "7.4",
+        "ts": true,
+        "os": "windows",
+        "arch": "amd64",
+        "url": "https://downloads.php.net/~windows/pecl/releases/memcached/3.4.0/php_memcached-3.4.0-7.4-ts-vc15-x64.zip",
+        "sha256": "a69741ea164325db4dc4dadb70276f1c229ade2151b58c6c5c1e14e328191226",
+        "format": "zip",
+        "bin": "php_memcached.dll",
+        "skip": ["*.pdb"]
+      },
+      {
+        "version": "3.4.0",
+        "php": "8.1",
+        "os": "windows",
+        "arch": "amd64",
+        "url": "https://downloads.php.net/~windows/pecl/releases/memcached/3.4.0/php_memcached-3.4.0-8.1-nts-vs16-x64.zip",
+        "sha256": "7d184c8bc278d4f8c3909455890c3242a566a6351ddce55dddefe05474561baf",
+        "format": "zip",
+        "bin": "php_memcached.dll",
+        "skip": ["*.pdb"]
+      },
+      {
+        "version": "3.4.0",
+        "php": "8.1",
+        "ts": true,
+        "os": "windows",
+        "arch": "amd64",
+        "url": "https://downloads.php.net/~windows/pecl/releases/memcached/3.4.0/php_memcached-3.4.0-8.1-ts-vs16-x64.zip",
+        "sha256": "babab71efe2a90584044f6ef4cc2702d4f38f8f93c5c31daa194d8e2d5d99a13",
+        "format": "zip",
+        "bin": "php_memcached.dll",
+        "skip": ["*.pdb"]
+      },
+      {
+        "version": "3.4.0",
+        "php": "8.2",
+        "os": "windows",
+        "arch": "amd64",
+        "url": "https://downloads.php.net/~windows/pecl/releases/memcached/3.4.0/php_memcached-3.4.0-8.2-nts-vs16-x64.zip",
+        "sha256": "531388b77481fde9329ea90293df9fe7895e07cedef4540827121b1a19f619c5",
+        "format": "zip",
+        "bin": "php_memcached.dll",
+        "skip": ["*.pdb"]
+      },
+      {
+        "version": "3.4.0",
+        "php": "8.2",
+        "ts": true,
+        "os": "windows",
+        "arch": "amd64",
+        "url": "https://downloads.php.net/~windows/pecl/releases/memcached/3.4.0/php_memcached-3.4.0-8.2-ts-vs16-x64.zip",
+        "sha256": "5e08563df226da22276aa4027ff1db2ae29e442fd8707180d16c76f7fc8c4859",
+        "format": "zip",
+        "bin": "php_memcached.dll",
+        "skip": ["*.pdb"]
+      },
+      {
+        "version": "3.4.0",
+        "php": "8.3",
+        "os": "windows",
+        "arch": "amd64",
+        "url": "https://downloads.php.net/~windows/pecl/releases/memcached/3.4.0/php_memcached-3.4.0-8.3-nts-vs16-x64.zip",
+        "sha256": "91a6fee873f6eb36d393d48f567461a4836a6c01c1af9beee0a7bca714efd3b9",
+        "format": "zip",
+        "bin": "php_memcached.dll",
+        "skip": ["*.pdb"]
+      },
+      {
+        "version": "3.4.0",
+        "php": "8.3",
+        "ts": true,
+        "os": "windows",
+        "arch": "amd64",
+        "url": "https://downloads.php.net/~windows/pecl/releases/memcached/3.4.0/php_memcached-3.4.0-8.3-ts-vs16-x64.zip",
+        "sha256": "d7364ed4e7f6fcf60df167ce680f3e8700402c078f828977e88d0df7957ea9ae",
+        "format": "zip",
+        "bin": "php_memcached.dll",
+        "skip": ["*.pdb"]
+      },
+      {
+        "version": "3.4.0",
+        "php": "8.4",
+        "os": "windows",
+        "arch": "amd64",
+        "url": "https://downloads.php.net/~windows/pecl/releases/memcached/3.4.0/php_memcached-3.4.0-8.4-nts-vs17-x64.zip",
+        "sha256": "dd4330cf70cae3de0f9c03a4eb194418e511a3103c329ba6f6e218b4a6a0d837",
+        "format": "zip",
+        "bin": "php_memcached.dll",
+        "skip": ["*.pdb"]
+      },
+      {
+        "version": "3.4.0",
+        "php": "8.4",
+        "ts": true,
+        "os": "windows",
+        "arch": "amd64",
+        "url": "https://downloads.php.net/~windows/pecl/releases/memcached/3.4.0/php_memcached-3.4.0-8.4-ts-vs17-x64.zip",
+        "sha256": "5e4ffab9599e42290df0aa970088d2588ac7f28e4a4484fba220756e3a3b32bb",
+        "format": "zip",
+        "bin": "php_memcached.dll",
+        "skip": ["*.pdb"]
+      },
+      {
+        "version": "3.4.0",
+        "php": "8.5",
+        "os": "windows",
+        "arch": "amd64",
+        "url": "https://downloads.php.net/~windows/pecl/releases/memcached/3.4.0/php_memcached-3.4.0-8.5-nts-vs17-x64.zip",
+        "sha256": "1c7eba843c0aa65c8b2f08fdfa7a0f892b9df531ae64d82e7c7ef1090ea0d103",
+        "format": "zip",
+        "bin": "php_memcached.dll",
+        "skip": ["*.pdb"]
+      },
+      {
+        "version": "3.4.0",
+        "php": "8.5",
+        "ts": true,
+        "os": "windows",
+        "arch": "amd64",
+        "url": "https://downloads.php.net/~windows/pecl/releases/memcached/3.4.0/php_memcached-3.4.0-8.5-ts-vs17-x64.zip",
+        "sha256": "9d924a54d70b0659d705b1a12a6140ff14e198a2eb5da08364561da19c61a2bb",
+        "format": "zip",
+        "bin": "php_memcached.dll",
         "skip": ["*.pdb"]
       }
     ]
