@@ -58,6 +58,8 @@ Download Nginx and at least one PHP version from **Settings → Runtimes** befor
 
 **Host** replaces `inventory.test` with a name such as `myinventory.test`. Subdomains follow that name. `phpmyadmin.test` is reserved.
 
+**Path** on a subdomain row points that host at `public_html` or another subdomain in the same project, so `www.inventory.test` can serve the same files as `inventory.test`. The subdomain folder stays on disk.
+
 ## Add PHP or Redis by hand
 
 **Settings → Runtimes** can download a version. You can also copy a build into the Phlo folder. The folder name is the version. Reload the dashboard after you copy it. A folder is Installed only when the program Phlo runs is inside it.

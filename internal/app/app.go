@@ -400,6 +400,38 @@ func (a *App) SetHost(account, host string) (string, error) {
 	return warn, nil
 }
 
+func (a *App) SetSubdomainPath(account, subdomain, pathTarget string) (string, error) {
+	a.mu.Lock()
+	defer a.mu.Unlock()
+	sites, err := a.listSites()
+	if err != nil {
+		return "", err
+	}
+	current, ok := findSite(sites, account)
+	if !ok {
+		return "", errs.New("account not found")
+	}
+	if subdomain == site.PublicRoot {
+		return "", errs.New("public_html always uses its own folder")
+	}
+	if !hasSubdomain(current, subdomain) {
+		return "", errs.New("subdomain not found")
+	}
+	accountDir := a.Layout.Account(account)
+	if err := site.ValidatePathTarget(accountDir, subdomain, pathTarget); err != nil {
+		return "", err
+	}
+	if err := site.UpdatePath(a.Layout.SiteFile(account), subdomain, pathTarget); err != nil {
+		return "", err
+	}
+	if a.Supervisor.Running() {
+		if err := a.Supervisor.Reload(); err != nil {
+			return "", err
+		}
+	}
+	return "", nil
+}
+
 func (a *App) SetPHP(account, target, version string) (string, error) {
 	a.mu.Lock()
 	defer a.mu.Unlock()

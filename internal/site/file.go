@@ -6,11 +6,13 @@ import (
 	"errors"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 type file struct {
-	Host string  `json:"host,omitempty"`
-	PHP  phpFile `json:"php,omitempty"`
+	Host  string            `json:"host,omitempty"`
+	PHP   phpFile           `json:"php,omitempty"`
+	Paths map[string]string `json:"paths,omitempty"`
 }
 
 type phpFile struct {
@@ -39,7 +41,7 @@ func load(path string) (file, error) {
 }
 
 func store(path string, meta file) error {
-	if meta.Host == "" && meta.PHP.PublicHTML == "" && len(meta.PHP.Subdomains) == 0 {
+	if meta.Host == "" && meta.PHP.PublicHTML == "" && len(meta.PHP.Subdomains) == 0 && len(meta.Paths) == 0 {
 		err := os.Remove(path)
 		if errors.Is(err, os.ErrNotExist) {
 			return nil
@@ -95,4 +97,26 @@ func UpdatePHP(path, target, version string) error {
 		}
 	}
 	return store(path, meta)
+}
+
+// UpdatePath points a subdomain host at public_html or another subdomain folder.
+// An empty path restores that subdomain's own folder.
+func UpdatePath(siteFile, subdomain, pathTarget string) error {
+	meta, err := load(siteFile)
+	if err != nil {
+		return err
+	}
+	if meta.Paths == nil {
+		meta.Paths = map[string]string{}
+	}
+	pathTarget = strings.TrimSpace(pathTarget)
+	if pathTarget == "" || pathTarget == subdomain {
+		delete(meta.Paths, subdomain)
+	} else {
+		meta.Paths[subdomain] = pathTarget
+	}
+	if len(meta.Paths) == 0 {
+		meta.Paths = nil
+	}
+	return store(siteFile, meta)
 }

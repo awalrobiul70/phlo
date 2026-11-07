@@ -20,6 +20,7 @@ type Controller interface {
 	CreateSite(account string) (string, error)
 	AddSubdomain(account, name string) (string, error)
 	SetHost(account, host string) (string, error)
+	SetSubdomainPath(account, subdomain, pathTarget string) (string, error)
 	SetPHP(account, target, version string) (string, error)
 	ApplySettings(patch app.SettingsPatch) (string, error)
 	SetHomeDir(path string, copyFiles bool) (string, error)
@@ -58,6 +59,7 @@ func Handler(controller Controller, onShutdown func(), onUpdated func()) http.Ha
 	mux.HandleFunc("GET /api/sites", apiHandler.sites)
 	mux.HandleFunc("POST /api/sites", apiHandler.createSite)
 	mux.HandleFunc("POST /api/sites/{account}/subdomains", apiHandler.addSubdomain)
+	mux.HandleFunc("PUT /api/sites/{account}/subdomains/{name}/path", apiHandler.setSubdomainPath)
 	mux.HandleFunc("PUT /api/sites/{account}/host", apiHandler.setHost)
 	mux.HandleFunc("PUT /api/sites/{account}/php", apiHandler.setPHP)
 	mux.HandleFunc("PUT /api/settings", apiHandler.setDefault)
@@ -156,6 +158,30 @@ func (h *httpAPI) setHost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	warn, err := h.controller.SetHost(account, *body.Host)
+	writeMutation(w, warn, err)
+}
+
+func (h *httpAPI) setSubdomainPath(w http.ResponseWriter, r *http.Request) {
+	account, ok := accountFrom(w, r)
+	if !ok {
+		return
+	}
+	name := r.PathValue("name")
+	if name == "" {
+		writeStatus(w, http.StatusBadRequest, "subdomain is required")
+		return
+	}
+	var body struct {
+		Path *string `json:"path"`
+	}
+	if !decode(w, r, &body) {
+		return
+	}
+	if body.Path == nil {
+		writeStatus(w, http.StatusBadRequest, "path is required")
+		return
+	}
+	warn, err := h.controller.SetSubdomainPath(account, name, *body.Path)
 	writeMutation(w, warn, err)
 }
 

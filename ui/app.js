@@ -57,15 +57,19 @@ const mongodbSelect = document.querySelector("#mongodb-version");
 const toolchainsEl = document.querySelector("#toolchains");
 const phpDialog = document.querySelector("#php-dialog");
 const hostDialog = document.querySelector("#host-dialog");
+const pathDialog = document.querySelector("#path-dialog");
 const phpError = document.querySelector("#php-error");
 const hostError = document.querySelector("#host-error");
+const pathError = document.querySelector("#path-error");
 const phpTarget = document.querySelector("#php-target");
 const phpVersions = document.querySelector("#php-versions");
+const pathChoice = document.querySelector("#path-choice");
 const customHost = document.querySelector("#custom-host");
 const hostPreview = document.querySelector("#host-preview");
 
 let state = { status: null, sites: [], runtime: null };
 let activeAccount = "";
+let activePathTarget = "";
 let currentView = "dashboard";
 
 async function api(method, url, body) {
@@ -938,10 +942,10 @@ function renderSites() {
     card.append(head);
     const roots = el("ul", undefined, "roots");
     if (site.publicHtml) {
-      roots.append(rootLine(site.account, "public_html", site.publicHtml.host, site.publicHtml.php, site.publicHtml.phpSource, site.publicHtml.documentRoot, site.publicHtml.phpPath));
+      roots.append(rootLine(site.account, "public_html", site.publicHtml.host, site.publicHtml.php, site.publicHtml.phpSource, site.publicHtml.documentRoot, site.publicHtml.phpPath, ""));
     }
     for (const sub of site.subdomains) {
-      roots.append(rootLine(site.account, sub.name, sub.host, sub.php, sub.phpSource, sub.documentRoot, sub.phpPath));
+      roots.append(rootLine(site.account, sub.name, sub.host, sub.php, sub.phpSource, sub.documentRoot, sub.phpPath, sub.path || ""));
     }
     card.append(roots);
     const actions = el("div", undefined, "card-tools");
@@ -967,7 +971,7 @@ function renderSites() {
   paintShares();
 }
 
-function rootLine(account, target, host, php, source, path, phpPath) {
+function rootLine(account, target, host, php, source, path, phpPath, pathTarget) {
   const item = el("li", undefined, "root");
   const badge = el("span", `PHP ${php}`, source === "override" ? "badge override" : "badge");
   const tools = el("span", undefined, "root-tools");
@@ -989,6 +993,13 @@ function rootLine(account, target, host, php, source, path, phpPath) {
   share.dataset.shareHost = host;
   share.addEventListener("click", () => shareHost(host, share));
   tools.append(folder, log, terminal, laravel, share);
+  if (target !== "public_html") {
+    const changePath = el("button", "Path", "secondary mini");
+    changePath.type = "button";
+    changePath.title = "Serve this host from another folder in this project";
+    changePath.addEventListener("click", () => openPath(account, target));
+    tools.append(changePath);
+  }
   const phpRow = el("div", undefined, "php-path");
   const phpCode = el("code", phpPath || "PHP is not installed");
   const copy = el("button", "Copy", "quiet mini");
@@ -998,7 +1009,8 @@ function rootLine(account, target, host, php, source, path, phpPath) {
   phpRow.append(phpCode, copy);
   const shared = el("span", "", "source");
   shared.dataset.shareUrl = host;
-  item.append(hostLinks(host), badge, el("span", source, "source"), tools, shared, el("code", path, "doc-root"), phpRow);
+  const pathNote = el("span", pathTarget ? "same as " + pathTarget : "", "source");
+  item.append(hostLinks(host), badge, el("span", source, "source"), tools, shared, pathNote, el("code", path, "doc-root"), phpRow);
   return item;
 }
 
@@ -1186,6 +1198,27 @@ function openHost() {
   renderPreview();
   hostDialog.showModal();
   customHost.focus();
+}
+
+function openPath(account, subdomain) {
+  const site = siteByAccount(account);
+  const sub = site.subdomains.find((item) => item.name === subdomain);
+  if (!sub) return;
+  activeAccount = account;
+  activePathTarget = subdomain;
+  pathError.textContent = "";
+  document.querySelector("#path-site").textContent = `${sub.host} → folder`;
+  pathChoice.replaceChildren();
+  pathChoice.append(new Option(`Own folder (subdomain/${subdomain})`, ""));
+  if (site.publicHtml) {
+    pathChoice.append(new Option("public_html", "public_html"));
+  }
+  for (const other of site.subdomains) {
+    if (other.name === subdomain) continue;
+    pathChoice.append(new Option(`subdomain/${other.name}`, other.name));
+  }
+  pathChoice.value = sub.path || "";
+  pathDialog.showModal();
 }
 
 function renderPreview() {
@@ -1515,6 +1548,21 @@ customHost.addEventListener("input", renderPreview);
 
 document.querySelector("#php-cancel").addEventListener("click", () => phpDialog.close());
 document.querySelector("#host-cancel").addEventListener("click", () => hostDialog.close());
+document.querySelector("#path-cancel").addEventListener("click", () => pathDialog.close());
+
+document.querySelector("#path-apply").addEventListener("click", async () => {
+  pathError.textContent = "";
+  try {
+    const data = await api("PUT", `/api/sites/${activeAccount}/subdomains/${activePathTarget}/path`, {
+      path: pathChoice.value,
+    });
+    pathDialog.close();
+    await refresh();
+    showBanner(data.warning || "Path saved.", "info");
+  } catch (err) {
+    pathError.textContent = err.message;
+  }
+});
 
 document.querySelector("#php-apply").addEventListener("click", async () => {
   phpError.textContent = "";

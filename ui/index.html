@@ -534,6 +534,7 @@
           <h3>PHP and the host name</h3>
           <p>Each <code>public_html</code> and subdomain can use its own PHP. Use Change PHP on the project card. A version that is not installed can be downloaded from that dialog. An empty choice uses the default PHP in Settings.</p>
           <p>Host replaces <code>inventory.test</code> with a name such as <code>myinventory.test</code>. The name has to end with the TLD from Settings, which is <code>test</code> unless you changed it. Subdomains follow the new name. <code>phpmyadmin.test</code> is reserved.</p>
+          <p>Path on a subdomain row points that host at another folder in the same project: its own <code>subdomain/{name}</code> folder, <code>public_html</code>, or another subdomain. Use that when <code>www.inventory.test</code> and <code>inventory.test</code> should serve the same files. The subdomain folder stays on disk; only the document root Nginx uses changes.</p>
 
           <h3>Add PHP or Redis by hand</h3>
           <p>Settings → Runtimes can download a version. You can also copy a build into this Phlo folder. The folder name is the version. Reload the dashboard after you copy it. A folder is Installed only when the program Phlo runs is inside it, the same way a PHP folder is Installed only when <code>php-cgi.exe</code> is there.</p>
@@ -612,6 +613,22 @@ $tcp.Close()</pre>
         <button type="button" id="php-default" class="secondary">Use Phlo default</button>
         <button type="button" id="php-download" class="secondary">Download</button>
         <button type="button" id="php-apply">Apply</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="path-dialog">
+    <form method="dialog">
+      <p class="eyebrow">Path</p>
+      <h2>Change path</h2>
+      <p id="path-site" class="dialog-site"></p>
+      <p class="hint">Serve this subdomain from another folder in the same project. Only folders from this project are listed.</p>
+      <label for="path-choice">Document root</label>
+      <select id="path-choice"></select>
+      <p id="path-error" role="alert"></p>
+      <div class="actions">
+        <button type="button" id="path-cancel" class="quiet">Cancel</button>
+        <button type="button" id="path-apply">Apply</button>
       </div>
     </form>
   </dialog>

@@ -35,6 +35,8 @@ type Root struct {
 	PHP          string `json:"php"`
 	PHPSource    string `json:"phpSource"`
 	PHPPath      string `json:"phpPath,omitempty"`
+	// Path is empty for this folder, or public_html / another subdomain name when shared.
+	Path string `json:"path,omitempty"`
 }
 
 // Site is one home/{account} directory.
@@ -194,12 +196,17 @@ func readAccount(home, account string, opt Options) (Site, bool, error) {
 			override = meta.PHP.Subdomains[name]
 		}
 		version, source := pick(override, opt.DefaultPHP)
+		doc, pathTarget, err := resolveDocumentRoot(dir, name, meta.Paths)
+		if err != nil {
+			return Site{}, false, fmt.Errorf("account %s subdomain %s: %w", account, name, err)
+		}
 		site.Subdomains = append(site.Subdomains, Root{
 			Name:         name,
-			DocumentRoot: filepath.Join(subDir, name),
+			DocumentRoot: doc,
 			Host:         strings.ToLower(name) + "." + eff,
 			PHP:          version,
 			PHPSource:    source,
+			Path:         pathTarget,
 		})
 		found = true
 	}
@@ -212,6 +219,67 @@ func pick(override, fallback string) (string, string) {
 		return strings.TrimSpace(override), "override"
 	}
 	return fallback, "default"
+}
+
+// PhysicalRoot is the on-disk folder for public_html or a subdomain name.
+func PhysicalRoot(accountDir, key string) (string, error) {
+	key = strings.TrimSpace(key)
+	if key == PublicRoot {
+		return filepath.Join(accountDir, PublicRoot), nil
+	}
+	if err := ValidateLabel(key); err != nil {
+		return "", errs.New("path must be public_html or a subdomain in this project")
+	}
+	return filepath.Join(accountDir, "subdomain", key), nil
+}
+
+// resolveDocumentRoot returns the folder Nginx should serve and the saved path target.
+func resolveDocumentRoot(accountDir, subdomain string, paths map[string]string) (string, string, error) {
+	target := strings.TrimSpace(paths[subdomain])
+	if target == "" || target == subdomain {
+		doc, err := PhysicalRoot(accountDir, subdomain)
+		return doc, "", err
+	}
+	if target != PublicRoot {
+		if err := ValidateLabel(target); err != nil {
+			return "", "", errs.New("path must be public_html or a subdomain in this project")
+		}
+	}
+	doc, err := PhysicalRoot(accountDir, target)
+	if err != nil {
+		return "", "", err
+	}
+	info, err := os.Stat(doc)
+	if err != nil || !info.IsDir() {
+		return "", "", errs.New("path " + target + " does not exist")
+	}
+	return doc, target, nil
+}
+
+// ValidatePathTarget checks that a subdomain can use pathTarget as its document root.
+func ValidatePathTarget(accountDir, subdomain, pathTarget string) error {
+	pathTarget = strings.TrimSpace(pathTarget)
+	if pathTarget == "" || pathTarget == subdomain {
+		return nil
+	}
+	if pathTarget == PublicRoot {
+		info, err := os.Stat(filepath.Join(accountDir, PublicRoot))
+		if err != nil || !info.IsDir() {
+			return errs.New("public_html does not exist")
+		}
+		return nil
+	}
+	if err := ValidateLabel(pathTarget); err != nil {
+		return errs.New("path must be public_html or a subdomain in this project")
+	}
+	if pathTarget == subdomain {
+		return nil
+	}
+	info, err := os.Stat(filepath.Join(accountDir, "subdomain", pathTarget))
+	if err != nil || !info.IsDir() {
+		return errs.New("subdomain " + pathTarget + " does not exist")
+	}
+	return nil
 }
 
 // WithHost returns a copy of the site using a custom host. An empty host restores the default.
