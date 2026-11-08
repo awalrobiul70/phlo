@@ -242,6 +242,10 @@ func (s *Supervisor) render(sites []site.Site, jobs []phpJob) error {
 			return err
 		}
 	}
+	// Nginx's -p prefix looks for logs/error.log before it reads error_log from nginx.conf.
+	if err := os.MkdirAll(filepath.Join(s.Layout.NginxWork(), "logs"), 0o755); err != nil {
+		return err
+	}
 	if err := os.MkdirAll(filepath.Dir(s.Layout.Log("nginx.log")), 0o755); err != nil {
 		return err
 	}

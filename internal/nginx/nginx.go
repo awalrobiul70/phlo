@@ -79,6 +79,9 @@ func Generate(in Input) (string, error) {
 	b.WriteString("events {\n    worker_connections 1024;\n}\n")
 	b.WriteString("http {\n")
 	b.WriteString(mimeTypes)
+	// Long project hosts such as appakms.ussschools.test need more than the
+	// Windows default bucket size of 32, or Nginx refuses to start.
+	b.WriteString("    server_names_hash_bucket_size 128;\n")
 	b.WriteString("    sendfile on;\n")
 	b.WriteString("    charset utf-8;\n")
 	if in.SSLListen != "" {
